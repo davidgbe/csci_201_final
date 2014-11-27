@@ -34,24 +34,24 @@ public class BagPanel extends JPanel {
 	    });
 	    bv.add(home);
 	    
-	    int myGold = 1; // get client's gold
+	    int myGold = mcu.getMoney(); // get client's gold
 	    String goldTxt = Integer.toString(myGold) + " Gold";
 	    myGoldLabel.setText(goldTxt);
 	    bv.add(myGoldLabel);
 
 		// if client has steroids
-		int numSteroids = 1; // get client's steroid num
+		int numSteroids = mcu.getItemQuantity("steroids"); // get client's steroid num
 		String steroidTxt = Integer.toString(numSteroids) + " Steroids - boost health";
 		steroidLabel.setText(steroidTxt);
 		
 		
 		// if client has morphine
-		int numMorphine = 1; 
+		int numMorphine = mcu.getItemQuantity("morphine"); 
 		String morphineTxt = Integer.toString(numMorphine) + " Morhphine - boost health";
 		morphineLabel.setText(morphineTxt);
 		
 		// if client has epi
-		int numEpi = 1; // get client's epi num
+		int numEpi = mcu.getItemQuantity("epinephrine"); // get client's epi num
 		String epiTxt = Integer.toString(numEpi) + " Epinephrine - boost health";
 		epiLabel.setText(epiTxt);	
 		
@@ -64,6 +64,21 @@ public class BagPanel extends JPanel {
 	
 	public void update() {
 		// updates based of client
+		int myGold = myClientUser.getMoney(); // get client's gold
+	    String goldTxt = Integer.toString(myGold) + " Gold";
+	    myGoldLabel.setText(goldTxt);
+	    
+	    int numSteroids = myClientUser.getItemQuantity("steroids"); // get client's steroid num
+		String steroidTxt = Integer.toString(numSteroids) + " Steroids - boost health";
+		steroidLabel.setText(steroidTxt);
+		
+		int numMorphine = myClientUser.getItemQuantity("morphine"); 
+		String morphineTxt = Integer.toString(numMorphine) + " Morhphine - boost health";
+		morphineLabel.setText(morphineTxt);
+		
+		int numEpi = myClientUser.getItemQuantity("epinephrine"); // get client's epi num
+		String epiTxt = Integer.toString(numEpi) + " Epinephrine - boost health";
+		epiLabel.setText(epiTxt);	
 		
 		
 		System.out.println("getting called");
