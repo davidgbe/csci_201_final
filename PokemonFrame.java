@@ -19,6 +19,7 @@ import javax.swing.border.TitledBorder;
 public class PokemonFrame extends JFrame {
 	
 	ClientUser myClientUser;
+	PokemonFrame pk;
 	
 	JPanel outerPanel = new JPanel(new CardLayout());
 
@@ -53,6 +54,7 @@ public class PokemonFrame extends JFrame {
 		setMinimumSize(new Dimension(800,720));
 		setMaximumSize(new Dimension(800, 720));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.pk = this;
 		
 		// CODE
 		myClientUser = new ClientUser();
@@ -138,11 +140,38 @@ public class PokemonFrame extends JFrame {
 			ImageIcon myTest = new ImageIcon(pokemonImages.get(pokemonNames[i]));
 			//For making sure they only select 6, we should just have a counter and the actionlistener 
 			//should just reshow the screen minus the selected button if it is less than 6, and then proceed if more than
-			final JButton button = new JButton("Pokemon Name " +Integer.toString(i+1), myTest);
+			final JButton button = new JButton(pokemonNames[i], myTest);
 			button.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					if(myClientUser.getPokemons().size() >= 3){
+						JOptionPane.showMessageDialog(pk,
+							    "You can only choose up to 3 pokemon",
+							    "Error",
+							    JOptionPane.ERROR_MESSAGE);
+						return;
+						
+					}
 					button.setEnabled(false);
+					String tempName = button.getText();
+					/****UNCOMMENT WHEN SUBCLASSED POKEMON EXIST***
+					if(tempName.equals("venosaur")){myClientUser.getPokemons().add(new Venosaur());}
+					else if(tempName.equals("blastoise")){myClientUser.getPokemons().add(new Blastoise());}
+					else if(tempName.equals("charizard")){myClientUser.getPokemons().add(new Charizard());}
+					else if(tempName.equals("dragonite")){myClientUser.getPokemons().add(new Dragonite());}
+					else if(tempName.equals("gyrados")){myClientUser.getPokemons().add(new Gyrados());}
+					else if(tempName.equals("hitmonchan")){myClientUser.getPokemons().add(new Hitmonchan());}
+					else if(tempName.equals("lapras")){myClientUser.getPokemons().add(new Lapras());}
+					else if(tempName.equals("mewtwo")){myClientUser.getPokemons().add(new Mewtwo());}
+					else if(tempName.equals("onix")){myClientUser.getPokemons().add(new Onix());}
+					else if(tempName.equals("pidgeot")){myClientUser.getPokemons().add(new Blastoise());}
+					else if(tempName.equals("pikachu")){myClientUser.getPokemons().add(new Blastoise());}
+					else if(tempName.equals("rapidash")){myClientUser.getPokemons().add(new Blastoise());}
+					else if(tempName.equals("rhydon")){myClientUser.getPokemons().add(new Blastoise());}
+					else if(tempName.equals("scyther")){myClientUser.getPokemons().add(new Blastoise());}
+					else if(tempName.equals("snorlax")){myClientUser.getPokemons().add(new Blastoise());}
+					
+					*/
 				}
 			});
 			inner.add(button);

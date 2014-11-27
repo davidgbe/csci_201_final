@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
@@ -16,6 +17,7 @@ public class ClientUser extends User implements Runnable{
 	
 	public ClientUser(){
 		super();
+		pokemons = new ArrayList<Pokemon>();
 		
 		try {
 			//TODO: DO NOT HARDCODE LOCALHOST

@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class User {
@@ -13,7 +14,7 @@ public class User {
 	private int losses;
 	private int opponentId;
 	private HashMap<String, Integer> items;
-	private Pokemon [] pokemons; 
+	protected ArrayList<Pokemon> pokemons; 
 	private Pokemon current_pokemon; 
 	
 	
@@ -97,6 +98,7 @@ public class User {
 		if(!this.items.containsKey(itemName)) {
 			System.out.println("MISSING: " + itemName);
 			//throw
+			return 0;
 		} 
 		return this.items.get(itemName).intValue();
 	}
@@ -108,5 +110,10 @@ public class User {
 	public Pokemon getCurrentPokemon() { 
 		return current_pokemon; 
 	}
+
+	public ArrayList<Pokemon> getPokemons() {
+		return pokemons;
+	}
+
 	
 }

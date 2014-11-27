@@ -41,13 +41,11 @@ public class ServerUser extends User implements Runnable {
 	}
 	
 	public boolean login(String username, String pass, Connection con) {
-		//lock.lock();
 		if(con == null) {
 			con = establishConnection();
 		}
 		if(con == null) {
-			//null;
-			//lock.unlock();
+			System.out.println("Connection to DB is NULL");
 			return false;
 		}
 		PreparedStatement stmt;
@@ -60,14 +58,11 @@ public class ServerUser extends User implements Runnable {
 				this.setID(results.getInt("id"));
 				this.setUsername(username);
 				this.fetch();
-				//lock.unlock();
 				return true;
 			} 
-			//lock.unlock();
 			return false;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			//lock.unlock();
 			return false;
 		}
 	}
@@ -76,6 +71,7 @@ public class ServerUser extends User implements Runnable {
 		Connection con = establishConnection();
 		
 		if(con == null) {
+			System.out.println("Connection to db is NULL");
 			return false;
 		}
 		PreparedStatement stmt;
