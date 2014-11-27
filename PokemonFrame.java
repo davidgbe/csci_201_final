@@ -137,8 +137,8 @@ public class PokemonFrame extends JFrame {
 		opponent.setUsername("Isaac");
 		System.out.println("users created");
 
-		Pokemon pikachu = new Pokemon("pikachu", pokemonImages.get("pikachu"), 100, 400); 
-		Pokemon charizard = new Pokemon("charizard", pokemonImages.get("charizard"), 200, 500); 
+		Pokemon pikachu = new Pokemon("pikachu", 100, pokemonImages.get("pikachu"), 400); 
+		Pokemon charizard = new Pokemon("charizard", 200, pokemonImages.get("charizard"), 500); 
 		u1.setCurrentPokemon(pikachu);
 		opponent.setCurrentPokemon(charizard);
 		System.out.println("pokemon created and set");
