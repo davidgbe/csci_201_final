@@ -2,7 +2,8 @@ import javax.swing.ImageIcon;
 
 
 public class Gyarados extends Pokemon{
-	public Gyarados(ImageIcon image){
-		super("gyarados", 600, image, 75.0);
+	public Gyarados(){
+		super("gyarados", 600, new ImageIcon("images/gyarados.png"), 75.0);
 	}
+
 }

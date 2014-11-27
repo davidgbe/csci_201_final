@@ -2,7 +2,7 @@ import javax.swing.ImageIcon;
 
 
 public class Pidgeot extends Pokemon{
-	public Pidgeot(ImageIcon image){
-		super("pidgeot", 400, image, 75.0);
+	public Pidgeot(){
+		super("pidgeot", 400, new ImageIcon("images/pidgeot.png"), 75.0);
 	}
 }

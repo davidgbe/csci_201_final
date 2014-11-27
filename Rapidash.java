@@ -2,7 +2,7 @@ import javax.swing.ImageIcon;
 
 
 public class Rapidash extends Pokemon{
-	public Rapidash(ImageIcon image){
-		super("rapidash", 500, image, 69.5);
+	public Rapidash(){
+		super("rapidash", 500, new ImageIcon("images/rapidash.png"), 69.5);
 	}
 }
