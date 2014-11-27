@@ -19,6 +19,7 @@ To get images working
 We should change the image file paths in the code so that we don't have to do that ^
 
 GIT BRANCHING
+
   Create new branch:
     git checkout -b "branchname"
       e.g. git checkout -b "db_user_login" !!! please preface with your initials !!!
