@@ -3,7 +3,7 @@ import java.io.Serializable;
 
 public class Message implements Serializable{
  
-    private String messageFrom;
+    protected String messageFrom;
  
     public Message() {
     	
@@ -11,5 +11,8 @@ public class Message implements Serializable{
  
     public String getUsernameMessageIsFrom(){
         return messageFrom;
+    }
+    public void setUsernameMessageIsFrom(String uname){
+    	this.messageFrom = uname;
     }
 }
