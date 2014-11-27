@@ -22,7 +22,14 @@ public class StorePanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		
 		this.mainPanel = new JPanel();
-		
+		JButton home = new JButton("Home");
+		home.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PokemonFrame.cl.show(PokemonFrame.outerPanel, "Main Menu");
+			}
+		});
+		mainPanel.add(home);
 		myGold = new JLabel("XXXX gold");
 		
 		JButton boost = new JButton("Steroids (Boost)");
@@ -61,6 +68,7 @@ public class StorePanel extends JPanel {
 		
 		
 		this.mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+		
 		mainPanel.add(boost); 
 		mainPanel.add(heal); 
 		mainPanel.add(revive); 
