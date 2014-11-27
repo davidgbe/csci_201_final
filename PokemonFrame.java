@@ -21,6 +21,7 @@ public class PokemonFrame extends JFrame {
 	
 	ClientUser myClientUser;
 	PokemonFrame pk;
+	Battle currentBattle;
 	
 	JPanel outerPanel = new JPanel(new CardLayout());
 
@@ -132,7 +133,11 @@ public class PokemonFrame extends JFrame {
 	}
 	
 	public void showBattle() {
-		battlePanel.add(new Battle(myClientUser));
+		if(currentBattle != null) {
+			battlePanel.remove(currentBattle);
+		}
+		currentBattle = new Battle(myClientUser);
+		battlePanel.add(currentBattle);
 		battlePanel.revalidate();
 		cl.show(outerPanel, "Battle");
 	}

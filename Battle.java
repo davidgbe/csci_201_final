@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Battle extends JPanel {
+	
+	private boolean disabled = false;
 
 	private JPanel battlePanel = new JPanel(); 
 	JPanel opponentPanel = new JPanel(); 
@@ -29,12 +31,16 @@ public class Battle extends JPanel {
 	JPanel statusPanel = new JPanel();
 	JPanel leftPanel = new JPanel(new CardLayout()); 
 	CardLayout cl = (CardLayout)(leftPanel.getLayout());
+	
+	private JButton choosePokemon;
+	private JButton viewBag;
+	private JButton fightButton;
 
 	
 	JPanel rightPanel = new JPanel(); 
 	
-	
 	private static final long serialVersionUID = 1L;
+	
 	Battle(ClientUser user) { 
 		setLayout(new BorderLayout());
 		setSize(800, 720); 
@@ -112,11 +118,11 @@ public class Battle extends JPanel {
 		
 
 		
-		JButton choosePokemon = new JButton("Choose Pokemon"); 
+		this.choosePokemon = new JButton("Choose Pokemon"); 
 		rightPanel.add(choosePokemon); 
-		JButton viewBag = new JButton("View Bag"); 
+		this.viewBag = new JButton("View Bag"); 
 		rightPanel.add(viewBag); 
-		JButton fightButton = new JButton("FIGHT"); 
+		this.fightButton = new JButton("FIGHT"); 
 		fightButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -138,18 +144,33 @@ public class Battle extends JPanel {
 		leftPanel.add(attacksPanel, "Attacks");
 		
 		cl.show(leftPanel, "Status");
+		this.toggle();
+	}
+	
+	public void toggle() {
+		if(disabled) {
+			this.fightButton.setEnabled(true);
+			this.viewBag.setEnabled(true);
+			this.choosePokemon.setEnabled(true);
+		} else {
+			this.fightButton.setEnabled(false);
+			this.viewBag.setEnabled(false);
+			this.choosePokemon.setEnabled(false);
+		}
+		this.disabled = !this.disabled;
+		this.repaint();
 	}
 	
 	class AttackListener implements ActionListener{
-		User user;
-		public AttackListener(User user) {
+		ClientUser user;
+		public AttackListener(ClientUser user) {
 			this.user = user;
 		}
 		public void actionPerformed(ActionEvent e) {
 			JButton button = (JButton) e.getSource();
 			battleStatus.setText(user.getCurrentPokemon().getName() + " used " + button.getText());
 			cl.show(leftPanel, "Status");
-			
+			this.user.sendMessageToServer(new Attack(button.getText(), 10));
 			// opponent needs to receive user's attack
 			// user needs to wait for opponent to send an attack.
 			// user needs to receive attack

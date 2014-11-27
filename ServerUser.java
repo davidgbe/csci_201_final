@@ -21,6 +21,7 @@ public class ServerUser extends User implements Runnable {
 	ObjectOutputStream out;
 	Vector<ServerUser> allUsers;
 	Server server;
+	ServerUser opponent;
 	
 	public static final String DB_ADDRESS = "jdbc:mysql://localhost/";
 	public static final String DB_NAME = "group_db";
@@ -187,6 +188,7 @@ public class ServerUser extends User implements Runnable {
 		try {
 			Pokemon myPokemon =  this.getCurrentPokemon();
 			Pokemon oPokemon = opponent.getCurrentPokemon();
+			this.opponent = opponent;
 			BattleData startData = new BattleData(this.getID(), myPokemon.getName(), oPokemon.getName(), myPokemon.getHealthPoints(), oPokemon.getHealthPoints(), myPokemon.getStrength(), oPokemon.getStrength());
 			if(!start) {
 				startData.setId(opponent.getID());
@@ -244,7 +246,31 @@ public class ServerUser extends User implements Runnable {
 			if(names[0] != null) {
 				this.setCurrentPokemon(this.getPokemon(names[0]));
 			}
+		} else if(msg instanceof Attack) {
+			processAttack((Attack)msg);
 		}
+	}
+	
+	private void processAttack(Attack attack) {
+		Pokemon ocp = this.opponent.getCurrentPokemon();
+		ocp.setHealthPoints(ocp.getHealthPoints() - attack.getDamage());
+		alertBothClientsOfAttack(attack.getName());
+	}
+	
+	private void alertBothClientsOfAttack(String attackName) {
+		Pokemon myP = this.getCurrentPokemon();
+		Pokemon oP = this.opponent.getCurrentPokemon();
+		BattleData bd = new BattleData(this.getID(), attackName, false, false, myP.getHealthPoints(), oP.getHealthPoints(), myP.getStrength(), oP.getStrength());
+		this.sendMessageToClient(bd);
+		this.opponent.sendMessageToClient(bd);
+	}
+	
+	private void alertBothClientsOfItem() {
+		
+	}
+	
+	private void alertBothClientsOfSwitch() {
+		
 	}
 
 	private void processPurchase(PurchaseUpdate pu) {
@@ -280,6 +306,14 @@ public class ServerUser extends User implements Runnable {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+	
+	public void sendMessageToClient(Object obj) {
+		try {
+			this.out.writeObject(obj);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	

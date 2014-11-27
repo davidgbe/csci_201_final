@@ -92,10 +92,36 @@ public class ClientUser extends User implements Runnable{
 			this.opponentHealth = bd.getOpponentHealth(); 
 			this.opponentStrength = bd.getOpponentStrength();
 			this.setCurrentPokemon(this.getPokemon(bd.getMyPokemon()));
+			this.pk.showBattle();
+			if(this.myTurn) {
+				this.pk.currentBattle.toggle();
+			}
 		} else {
-			
+			if(bd.getType().equals("attack")) {
+				Pokemon myP = this.getCurrentPokemon();
+				if(bd.getId() == this.getID()) {
+					myP.setHealthPoints(bd.getMyHealth());
+					myP.setStrength(bd.getMyStrength());
+					this.opponentHealth = bd.getOpponentHealth();
+					this.opponentStrength = bd.getOpponentStrength();
+				} else {
+					myP.setHealthPoints(bd.getOpponentHealth());
+					myP.setStrength(bd.getOpponentStrength());
+					this.opponentHealth = bd.getMyHealth();
+					this.opponentStrength = bd.getMyStrength();
+				}
+// add proper code to update the battle
+//				this.pk.showBattle();
+			}
 		}
-		this.pk.showBattle();
+	}
+	
+	public void sendMessageToServer(Object obj) {
+		try {
+			this.out.writeObject(obj);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void run() {
