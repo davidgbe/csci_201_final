@@ -17,7 +17,6 @@ public class ClientUser extends User implements Runnable{
 	
 	public ClientUser(){
 		super();
-		pokemons = new ArrayList<Pokemon>();
 		
 		try {
 			//TODO: DO NOT HARDCODE LOCALHOST
