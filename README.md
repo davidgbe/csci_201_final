@@ -21,22 +21,32 @@ We should change the image file paths in the code so that we don't have to do th
 GIT BRANCHING
 
   Create new branch:
+  
     git checkout -b "branchname"
+    
       e.g. git checkout -b "db_user_login" !!! please preface with your initials !!!
       
   Switching branches:
+  
     git checkout branchname
+    
       e.g. git checkout db_user_login
+      
            git checkout master
            
   Pushing:
     git push origin branchname
+    
       e.g. git push origin db_user_login
       
   Pulling:
+  
     First switch to desired branch then:
+    
     git pull
+    
     e.g. git checkout master
+    
          git pull
 
 
