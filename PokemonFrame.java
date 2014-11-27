@@ -379,7 +379,13 @@ public class PokemonFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// while another opponent is not available
 //				cl.show(outerPanel, "Waiting");
-				
+				if(myClientUser.getPokemons().size() <= 0){
+					JOptionPane.showMessageDialog(pk,
+						    "You must select at least one pokemon before going into battle!",
+						    "Error",
+						    JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				cl.show(outerPanel, "Battle");
 			}
         });
