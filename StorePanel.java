@@ -32,9 +32,9 @@ public class StorePanel extends JPanel {
 		mainPanel.add(home);
 		myGold = new JLabel("XXXX gold");
 		
-		JButton boost = new JButton("Steroids (Boost)");
-		JButton heal = new JButton("Morphine (Heal)");
-		JButton revive = new JButton("Epinephrine (Revive)");
+		JButton boost = new JButton("Steroids (Boost) - 15 Gold");
+		JButton heal = new JButton("Morphine (Heal) - 25 Gold");
+		JButton revive = new JButton("Epinephrine (Revive) - 50 Gold");
 		myGold.setAlignmentX(Component.CENTER_ALIGNMENT); 
 
 		mainPanel.add(myGold); 

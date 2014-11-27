@@ -167,8 +167,17 @@ public class ClientUser extends User implements Runnable{
 							this.updateItem("morphine", ((PurchaseUpdate) objectReceived).getMorphine());
 							this.updateItem("epinephrine", ((PurchaseUpdate) objectReceived).getEpinephrine());
 							this.pk.storePanel.update();
+								JOptionPane.showMessageDialog(pk,
+									    "Successfully purchased",
+									    "",
+									    JOptionPane.INFORMATION_MESSAGE);
+							
 						} else {
-							//purchase failed stuff
+								JOptionPane.showMessageDialog(pk,
+									    "You do not have enough gold",
+									    "Error",
+									    JOptionPane.ERROR_MESSAGE);
+				
 						}
 					} else if(objectReceived instanceof ChatMessage){
 						pk.addTextToChat((ChatMessage)objectReceived);
