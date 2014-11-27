@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -31,7 +32,7 @@ public class PokemonFrame extends JFrame {
 	
 	CardLayout cl = (CardLayout)(outerPanel.getLayout());
 	
-    ImageIcon logo = new ImageIcon("src/images/logo.jpg");
+    ImageIcon logo = new ImageIcon("./images/logo.jpg");
     
 	//LAUREN ADDED NEW CARDS 
 	StorePanel storePanel;
@@ -42,9 +43,9 @@ public class PokemonFrame extends JFrame {
 	public static String [] pokemonNames = {"venusaur", "blastoise", "charizard", "dragonite", "gyarados", "hitmonchan",
 		"lapras", "mewtwo", "onix", "pidgeot", "pikachu", "rapidash", "rhydon", "scyther", "snorlax"};
     
-	Map<String, String> pokemonImages = new HashMap<String, String>();
+	Map<String, ImageIcon> pokemonImages = new HashMap<String, ImageIcon>();
 
-
+	static int chosenPokemonCounter = 0;
 
 	public PokemonFrame() {
 		super("Pokemon");
@@ -62,8 +63,9 @@ public class PokemonFrame extends JFrame {
 		
 		//populating pokemon image library
 		for (int i = 0; i < 15; i++){
-			String filename = "./src/images/" + pokemonNames[i] + ".png";
-			pokemonImages.put(pokemonNames[i], filename);
+			String filename = "./images/" + pokemonNames[i] + ".png";
+			ImageIcon img = new ImageIcon(filename);
+			pokemonImages.put(pokemonNames[i], img);
 		}
 	
 		
@@ -130,23 +132,51 @@ public class PokemonFrame extends JFrame {
 		JPanel inner = new JPanel();
 		JScrollPane scrollPane = new JScrollPane(inner);
 		inner.setLayout(new GridLayout(15, 1)); 
-		inner.setMinimumSize(new Dimension(this.getWidth()-50, this.getHeight()-50));
-		inner.setPreferredSize(new Dimension(this.getWidth()-50, this.getHeight()-50));
-		inner.setMaximumSize(new Dimension(this.getWidth()-50, this.getHeight()-50));
+		inner.setMinimumSize(new Dimension(780, 650));
+		inner.setPreferredSize(new Dimension(780, 650));
+		inner.setMaximumSize(new Dimension(780, 650));
+		
+		JButton [] arrButtons = new JButton [15];
 		for (int i=0; i<15; i++) {
 //			System.out.println(pokemonImages.get(pokemonNames[i]));
-			ImageIcon myTest = new ImageIcon(pokemonImages.get(pokemonNames[i]));
+			ImageIcon myTest = pokemonImages.get(pokemonNames[i]);
+			Image image = myTest.getImage(); // transform it 
+			Image newimg = image.getScaledInstance(60, 60,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+			myTest = new ImageIcon(newimg);  // transform it back
+
 			//For making sure they only select 6, we should just have a counter and the actionlistener 
 			//should just reshow the screen minus the selected button if it is less than 6, and then proceed if more than
-			final JButton button = new JButton("Pokemon Name " +Integer.toString(i+1), myTest);
+			final JButton button = new JButton(pokemonNames[i].toUpperCase(), myTest);
+			arrButtons[i] = button;
 			button.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					button.setEnabled(false);
+					if (chosenPokemonCounter < 6 && button.getBackground() != Color.BLUE){
+						chosenPokemonCounter++;
+						button.setBackground(Color.BLUE);
+						button.setOpaque(true);
+					} else if (button.getBackground() == Color.BLUE) {
+						chosenPokemonCounter--;
+						button.setBackground(null);
+						button.setOpaque(false);
+					}
 				}
 			});
 			inner.add(button);
 		}
+		JButton submit = new JButton("Submit");
+		submit.addActionListener(new ActionListener(){
+			// add pokemon to user going through all the buttons 
+			// use arrButtons. check for blue (selected) buttons
+			// get text
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				cl.show(outerPanel, "Main Menu");
+			}
+
+		});
+		choosePokemonPanel.add(submit, BorderLayout.NORTH);
 		choosePokemonPanel.add(inner, BorderLayout.CENTER);
 		
 		add(choosePokemonPanel);
@@ -201,10 +231,10 @@ public class PokemonFrame extends JFrame {
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
-        JTextField loginField = new JTextField(10);
+        final JTextField loginField = new JTextField(10);
         jp.add(loginField, gbc);
         gbc.gridy++;
-        JTextField passwordField = new JTextField(10);
+        final JTextField passwordField = new JTextField(10);
         jp.add(passwordField, gbc);
 
         gbc.gridx = 1;
@@ -332,10 +362,10 @@ public class PokemonFrame extends JFrame {
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
-        JTextField usernameField = new JTextField(10);
+        final JTextField usernameField = new JTextField(10);
         jp.add(usernameField, gbc);
         gbc.gridy++;
-        JTextField passwordField = new JTextField(10);
+        final JTextField passwordField = new JTextField(10);
         jp.add(passwordField, gbc);
         gbc.gridx = 1;
         gbc.gridy++;
