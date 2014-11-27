@@ -16,6 +16,7 @@ public class User {
 	private HashMap<String, Integer> items;
 	protected ArrayList<Pokemon> pokemons; 
 	private Pokemon current_pokemon; 
+	private boolean inBattle;
 	
 	public User(){
 		this.setItems(new HashMap<String, Integer>());
@@ -31,6 +32,14 @@ public class User {
 		} else {
 			this.setItems(new HashMap<String, Integer>());
 		}
+	}
+	
+	public boolean isInBattle() {
+		return inBattle;
+	}
+	
+	public void setInBattle(boolean inBattle) {
+		this.inBattle = inBattle;
 	}
 	
 	public int getID() {

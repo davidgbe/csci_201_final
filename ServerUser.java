@@ -1,3 +1,4 @@
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -246,13 +247,18 @@ public class ServerUser extends User implements Runnable {
 				}
 			}
 			
+		} catch(EOFException eofe) {
+			if(this.isInBattle()) {
+				//exit battle
+			}
+			//disconnect stuff
 		} catch (Exception ioe) {
 			System.out.println("IOException in ServerUser run method: " + ioe.getMessage());
 			// don't print stack trace for a user simply quiting the program
 			if(!(ioe instanceof SocketException)){
 				ioe.printStackTrace();
 			}
-		}
+		} 
 	}
 
 }
