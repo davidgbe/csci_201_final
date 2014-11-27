@@ -4,7 +4,7 @@ CREATE TABLE users (
     password VARCHAR(64), 
     wins INTEGER, 
     total_games INTEGER,
-    money INTEGER, 
+    money INTEGER DEFAULT 100, 
     steroids INTEGER,
     morphine INTEGER,
     epinephrine INTEGER
