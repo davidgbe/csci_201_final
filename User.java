@@ -14,12 +14,13 @@ public class User {
 	private int losses;
 	private int opponentId;
 	private HashMap<String, Integer> items;
-	protected ArrayList<Pokemon> pokemons; 
+	private ArrayList<Pokemon> pokemons; 
 	private Pokemon current_pokemon; 
 	private boolean inBattle;
 	
 	public User(){
 		this.setItems(new HashMap<String, Integer>());
+		pokemons = new ArrayList<Pokemon>();
 	}
 	
 	public User(int id, String username, int money, int wins, int losses, HashMap<String, Integer> items){
@@ -125,21 +126,21 @@ public class User {
 	
 	public boolean addPokemon(String name) {
 		if(!this.pokemons.contains(name)) {
-//			if(name.equals("venosaur")){myClientUser.getPokemons().add(new Venosaur());}
-//			else if(name.equals("blastoise")){myClientUser.getPokemons().add(new Blastoise());}
-//			else if(name.equals("charizard")){myClientUser.getPokemons().add(new Charizard());}
-//			else if(name.equals("dragonite")){myClientUser.getPokemons().add(new Dragonite());}
-//			else if(name.equals("gyrados")){myClientUser.getPokemons().add(new Gyrados());}
-//			else if(name.equals("hitmonchan")){myClientUser.getPokemons().add(new Hitmonchan());}
-//			else if(name.equals("lapras")){myClientUser.getPokemons().add(new Lapras());}
-//			else if(name.equals("mewtwo")){myClientUser.getPokemons().add(new Mewtwo());}
-//			else if(name.equals("onix")){myClientUser.getPokemons().add(new Onix());}
-//			else if(name.equals("pidgeot")){myClientUser.getPokemons().add(new Pidgeot());}
-//			else if(name.equals("pikachu")){myClientUser.getPokemons().add(new Pikachu());}
-//			else if(name.equals("rapidash")){myClientUser.getPokemons().add(new Rapidash());}
-//			else if(name.equals("rhydon")){myClientUser.getPokemons().add(new Rhydon());}
-//			else if(name.equals("scyther")){myClientUser.getPokemons().add(new Scyther());}
-//			else if(name.equals("snorlax")){myClientUser.getPokemons().add(new Snorlax());}
+			if(name.equals("venusaur")){pokemons.add(new Venusaur());}
+			else if(name.equals("blastoise")){pokemons.add(new Blastoise());}
+			else if(name.equals("charizard")){pokemons.add(new Charizard());}
+			else if(name.equals("dragonite")){pokemons.add(new Dragonite());}
+			else if(name.equals("gyrados")){pokemons.add(new Gyarados());}
+			else if(name.equals("hitmonchan")){pokemons.add(new Hitmonchan());}
+			else if(name.equals("lapras")){pokemons.add(new Lapras());}
+			else if(name.equals("mewtwo")){pokemons.add(new Mewtwo());}
+			else if(name.equals("onix")){pokemons.add(new Onix());}
+			else if(name.equals("pidgeot")){pokemons.add(new Pidgeot());}
+			else if(name.equals("pikachu")){pokemons.add(new Pikachu());}
+			else if(name.equals("rapidash")){pokemons.add(new Rapidash());}
+			else if(name.equals("rhydon")){pokemons.add(new Rhydon());}
+			else if(name.equals("scyther")){pokemons.add(new Scyther());}
+			else if(name.equals("snorlax")){pokemons.add(new Snorlax());}
 			return true;
 		} 
 		return false;

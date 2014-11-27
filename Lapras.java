@@ -2,7 +2,7 @@ import javax.swing.ImageIcon;
 
 
 public class Lapras extends Pokemon {
-	public Lapras(ImageIcon image){
-		super("lapras", 800, image, 60.0);
+	public Lapras(){
+		super("lapras", 800, new ImageIcon("images/lapras.png"), 60.0);
 	}
 }
