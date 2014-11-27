@@ -172,6 +172,9 @@ public class User {
 		System.out.println("Wins: " + this.getWins());
 		System.out.println("Losses: "+ this.getLosses());
 		System.out.println("OpponentID: " + this.getOpponentID());
+
+	public void setCurrentPokemon(Pokemon pokemon) { 
+		current_pokemon = pokemon; 
 	}
 	
 }

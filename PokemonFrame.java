@@ -30,6 +30,7 @@ public class PokemonFrame extends JFrame {
 	JPanel startPanel = new JPanel();
 	JPanel menuPanel = new JPanel();
 	JPanel chatPanel = new JPanel();
+	JPanel battlePanel = new JPanel();
 	
 	JTextArea txt;
 	JTextArea write;
@@ -85,6 +86,7 @@ public class PokemonFrame extends JFrame {
 		
 		
 		// ADD CARDS TO OUTERPANEL
+		outerPanel.add(battlePanel, "Battle");
 		outerPanel.add(chatPanel, "Chat");
 		outerPanel.add(signUpPanel, "Sign Up");
 		outerPanel.add(menuPanel, "Main Menu");
@@ -129,8 +131,21 @@ public class PokemonFrame extends JFrame {
 		waitingPanel.add(waiting);
 		
 		
-		
-		add(waitingPanel);
+		User u1 = new User();
+		u1.setUsername("Aneesha"); 
+		User opponent = new User (); 
+		opponent.setUsername("Isaac");
+		System.out.println("users created");
+
+		Pokemon pikachu = new Pokemon("pikachu", pokemonImages.get("pikachu"), 100, 400); 
+		Pokemon charizard = new Pokemon("charizard", pokemonImages.get("charizard"), 200, 500); 
+		u1.setCurrentPokemon(pikachu);
+		opponent.setCurrentPokemon(charizard);
+		System.out.println("pokemon created and set");
+
+		battlePanel.add(new Battle(u1, opponent));
+		System.out.println("battle panel added");
+		System.out.println("shown");
 	}
 	
 	private void sendMessageToServer(Object objectToSend){
@@ -363,9 +378,9 @@ public class PokemonFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// while another opponent is not available
-				cl.show(outerPanel, "Waiting");
+//				cl.show(outerPanel, "Waiting");
 				
-				// cl.show(Battle);
+				cl.show(outerPanel, "Battle");
 			}
         });
     }
