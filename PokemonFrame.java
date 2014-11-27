@@ -31,6 +31,9 @@ public class PokemonFrame extends JFrame {
 	JPanel menuPanel = new JPanel();
 	JPanel chatPanel = new JPanel();
 	
+	JTextArea txt;
+	JTextArea write;
+	
 	CardLayout cl = (CardLayout)(outerPanel.getLayout());
 	
     ImageIcon logo = new ImageIcon("./images/logo.jpg");
@@ -129,6 +132,15 @@ public class PokemonFrame extends JFrame {
 		
 		add(waitingPanel);
 	}
+	
+	private void sendMessageToServer(Object objectToSend){
+		try {
+			myClientUser.getOutputStream().writeObject(objectToSend);
+		} catch (IOException e1) {
+
+			e1.printStackTrace();
+		}
+	}
 	private void choosePokemonPanel(){ //cant get image to show, but rough outline is there. I have thoughts on how to make the selection of only 6 work...see below
 		
 		JPanel inner = new JPanel();
@@ -212,7 +224,7 @@ public class PokemonFrame extends JFrame {
 		add(choosePokemonPanel);
 	}
 	private void createChatPanel() {
-		JTextArea txt = new JTextArea();
+		txt = new JTextArea();
 		JTextArea write = new JTextArea();
 		JButton sendMessageButton = new JButton("Send");
         JScrollPane sp = new JScrollPane(txt);
@@ -229,20 +241,26 @@ public class PokemonFrame extends JFrame {
 		jp.add(spwrite);
 		jp.add(sendMessageButton);
 		chatPanel.add(jp, BorderLayout.SOUTH);
+		
 		class SendMessage implements ActionListener {
-			JTextArea txt;
-			JTextArea write;
-			public SendMessage(JTextArea txt, JTextArea write){
-				this.txt = txt;
-				this.write = write;
+			
+			public SendMessage(){
 			}
 		    public void actionPerformed(ActionEvent e) {
 		        String text = write.getText();
-		        txt.append(text + "\n");
+		        System.out.println("my username:" + myClientUser.getUsername());
+		        ChatMessage messageToSend = new ChatMessage(write.getText(), myClientUser.getUsername());
+		        sendMessageToServer(messageToSend);
+		        txt.append(myClientUser.getUsername() + ": " + text + "\n");
 		        write.setText("");
 		    }
 		}
-		sendMessageButton.addActionListener(new SendMessage(txt, write));
+		sendMessageButton.addActionListener(new SendMessage());
+	}
+	
+	public void addTextToChat(ChatMessage chatmsg){
+		txt.append(chatmsg.getUsernameMessageIsFrom() + ": " + chatmsg.getMessageContents() + "\n");
+		
 	}
 	private void createSignUpPanel() {
 		JPanel jp = new JPanel();
@@ -305,7 +323,7 @@ public class PokemonFrame extends JFrame {
         signUpPanel.add(jp, BorderLayout.CENTER);
 	}
 	private void createMenuPanel() {
-		JButton choose = new JButton("Choose Pokémon"); 
+		JButton choose = new JButton("Choose Pokemon"); 
 		JButton store = new JButton("Go to item store"); 
 		JButton bag = new JButton("View Bag"); 
 		JButton join = new JButton("Join Game");

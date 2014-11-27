@@ -18,7 +18,8 @@ public class Server {
 			ServerSocket ss= new ServerSocket(1234);
 			while(true){
 				Socket userSocket = ss.accept();
-				ServerUser ut = new ServerUser(userSocket);
+				ServerUser ut = new ServerUser(userSocket, allUsers);
+				allUsers.add(ut);
 				new Thread(ut).start();
 			}
 		} catch (IOException ioe) {

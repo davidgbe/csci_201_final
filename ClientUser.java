@@ -130,6 +130,9 @@ public class ClientUser extends User implements Runnable{
 							//purchase failed stuff
 						}
 					}
+					else if(objectReceived instanceof ChatMessage){
+						pk.addTextToChat((ChatMessage)objectReceived);
+					}
 						
 				}
 			}

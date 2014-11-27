@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.Vector;
 import java.util.concurrent.locks.ReentrantLock;
 
 
@@ -17,6 +18,7 @@ public class ServerUser extends User implements Runnable {
 	
 	private Socket userSocket;
 	ObjectOutputStream out;
+	Vector<ServerUser> allUsers;
 	
 	public static final String DB_ADDRESS = "jdbc:mysql://localhost/";
 	public static final String DB_NAME = "group_db";
@@ -30,9 +32,10 @@ public class ServerUser extends User implements Runnable {
 	
 	private static ReentrantLock lock = new ReentrantLock();
 	
-	public ServerUser(Socket s) {
+	public ServerUser(Socket s, Vector<ServerUser> allUsers) {
 		super(-1, "", 0, 0, 0, new HashMap<String, Integer>());
 		this.userSocket = s;
+		this.allUsers = allUsers;
 		try {
 			out = new ObjectOutputStream(s.getOutputStream());
 		} catch (IOException e) {
@@ -191,11 +194,28 @@ public class ServerUser extends User implements Runnable {
 			boolean succeeded = this.createUser(((NewUser) msg).getUsername(), ((NewUser) msg).getPassword());
 			try {
 				out.writeObject(new LoginAuthenticated(succeeded, true));
+				UserUpdate uu = new UserUpdate(this.getID(), this.getUsername(), this.getMoney(), this.getWins(), this.getLosses(), this.getOpponentID(), this.getItemQuantity("steroids"), this.getItemQuantity("morphine"), this.getItemQuantity("epinephrine"));
+				out.writeObject(uu);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else if(msg instanceof PurchaseUpdate) {
 			processPurchase((PurchaseUpdate)msg);
+		}
+		else if(msg instanceof ChatMessage){
+			System.out.println("Received chat message");
+			ChatMessage messageReceived = (ChatMessage)msg;
+			// forward message to all other users
+			for(int i = 0; i < allUsers.size(); ++i){
+				if(!(allUsers.get(i) == this)){
+					try {
+						allUsers.get(i).out.writeObject(messageReceived);
+						System.out.println("Forwarded message to a user");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 	}
 
@@ -248,6 +268,10 @@ public class ServerUser extends User implements Runnable {
 			
 		} catch (Exception ioe) {
 			System.out.println("IOException in ServerUser run method: " + ioe.getMessage());
+
+			allUsers.remove(this);
+			System.out.println(this.getUsername() + " quit");
+			
 			// don't print stack trace for a user simply quiting the program
 			if(!(ioe instanceof SocketException)){
 				ioe.printStackTrace();
