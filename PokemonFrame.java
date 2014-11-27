@@ -352,7 +352,6 @@ public class PokemonFrame extends JFrame {
         loginButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// SEND LOGIN MESSAGE
 				Login loginMessage = new Login();
 				loginMessage.setUsername(usernameField.getText());
 				loginMessage.setPassword(passwordField.getText());

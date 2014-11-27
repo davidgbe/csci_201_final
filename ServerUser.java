@@ -119,7 +119,7 @@ public class ServerUser extends User implements Runnable {
 				System.out.println("Unable to establish connection");
 				return false;
 			}
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO users (wins, total_games, money, steroids, morphine, epinephrine) VALUES (?, ?, ?, ?, ?, ?) WHERE id = ?;");
+			PreparedStatement stmt = con.prepareStatement("UPDATE users SET wins=?, total_games=?, money=?, steroids=?, morphine=?, epinephrine=? where id=?;");
 			stmt.setInt(1, this.getWins());
 			stmt.setInt(2, this.getWins() + this.getLosses());
 			stmt.setInt(3, this.getMoney());
@@ -128,6 +128,7 @@ public class ServerUser extends User implements Runnable {
 			stmt.setInt(6, this.getItems().get("epinephrine").intValue());
 			stmt.setInt(7, this.getID());
 			stmt.execute();
+			System.out.println("Happens");
 		} catch(Exception e) {
 			e.printStackTrace();
 			//lock.unlock();
@@ -185,7 +186,8 @@ public class ServerUser extends User implements Runnable {
 			boolean succeeded = this.login(((Login) msg).getUsername(), ((Login) msg).getPassword(), null);
 			try {
 				out.writeObject(new LoginAuthenticated(succeeded, false));
-				out.writeObject(new UserUpdate(this.getID(), this.getUsername(), this.getMoney(), this.getWins(), this.getLosses(), this.getOpponentID(), this.getItemQuantity("steroids"), this.getItemQuantity("morphine"), this.getItemQuantity("epinephrine")));
+				UserUpdate uu = new UserUpdate(this.getID(), this.getUsername(), this.getMoney(), this.getWins(), this.getLosses(), this.getOpponentID(), this.getItemQuantity("steroids"), this.getItemQuantity("morphine"), this.getItemQuantity("epinephrine"));
+				out.writeObject(uu);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -203,6 +205,9 @@ public class ServerUser extends User implements Runnable {
 
 	private void processPurchase(PurchaseUpdate pu) {
 		int total = 0;
+		System.out.println("S: " + pu.getSteroids());
+		System.out.println("M: " + pu.getMorphine());
+		System.out.println("E: " + pu.getEpinephrine());
 		if(pu.getSteroids() != 0) {
 			total += pu.getSteroids() * STEROIDS_PRICE;
 		}
