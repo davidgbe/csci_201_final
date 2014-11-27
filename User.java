@@ -130,7 +130,7 @@ public class User {
 			else if(name.equals("blastoise")){pokemons.add(new Blastoise());}
 			else if(name.equals("charizard")){pokemons.add(new Charizard());}
 			else if(name.equals("dragonite")){pokemons.add(new Dragonite());}
-			else if(name.equals("gyrados")){pokemons.add(new Gyarados());}
+			else if(name.equals("gyarados")){pokemons.add(new Gyarados());}
 			else if(name.equals("hitmonchan")){pokemons.add(new Hitmonchan());}
 			else if(name.equals("lapras")){pokemons.add(new Lapras());}
 			else if(name.equals("mewtwo")){pokemons.add(new Mewtwo());}
