@@ -44,7 +44,7 @@ public class StorePanel extends JPanel {
 		heal.setSize(parent.getWidth()*3/4, parent.getHeight()/5);
 		heal.setMaximumSize(heal.getSize());
 		heal.setAlignmentX(Component.CENTER_ALIGNMENT); 
-		boost.addActionListener(new ActionListener(){
+		heal.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ae) {
 				myClientUser.purchaseMorphine();
 			}
@@ -53,7 +53,7 @@ public class StorePanel extends JPanel {
 		revive.setSize(parent.getWidth()*3/4, parent.getHeight()/5);
 		revive.setMaximumSize(revive.getSize());
 		revive.setAlignmentX(Component.CENTER_ALIGNMENT); 
-		boost.addActionListener(new ActionListener(){
+		revive.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ae) {
 				myClientUser.purchaseEpinephrine();
 			}

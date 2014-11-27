@@ -17,7 +17,6 @@ public class User {
 	protected ArrayList<Pokemon> pokemons; 
 	private Pokemon current_pokemon; 
 	
-	
 	public User(){
 		this.setItems(new HashMap<String, Integer>());
 	}
@@ -115,5 +114,14 @@ public class User {
 		return pokemons;
 	}
 
+	
+	public void print() {
+		System.out.println("ID: " + this.getID());
+		System.out.println("Username: " + this.getUsername());
+		System.out.println("Money: " + this.getMoney());
+		System.out.println("Wins: " + this.getWins());
+		System.out.println("Losses: "+ this.getLosses());
+		System.out.println("OpponentID: " + this.getOpponentID());
+	}
 	
 }

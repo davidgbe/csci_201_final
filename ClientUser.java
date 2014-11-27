@@ -63,9 +63,9 @@ public class ClientUser extends User implements Runnable{
 	}
 	
 	private void update(UserUpdate user) {
+		
 		this.setID(user.getID());
 		this.setUsername(user.getUsername());
-		System.out.println("Money round 2" + user.getMoney());
 		this.setMoney(user.getMoney());
 		this.setWins(user.getWins());
 		this.setLosses(user.getLosses());
