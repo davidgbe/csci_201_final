@@ -122,7 +122,48 @@ public class User {
 	public ArrayList<Pokemon> getPokemons() {
 		return pokemons;
 	}
-
+	
+	public boolean addPokemon(String name) {
+		if(!this.pokemons.contains(name)) {
+//			if(name.equals("venosaur")){myClientUser.getPokemons().add(new Venosaur());}
+//			else if(name.equals("blastoise")){myClientUser.getPokemons().add(new Blastoise());}
+//			else if(name.equals("charizard")){myClientUser.getPokemons().add(new Charizard());}
+//			else if(name.equals("dragonite")){myClientUser.getPokemons().add(new Dragonite());}
+//			else if(name.equals("gyrados")){myClientUser.getPokemons().add(new Gyrados());}
+//			else if(name.equals("hitmonchan")){myClientUser.getPokemons().add(new Hitmonchan());}
+//			else if(name.equals("lapras")){myClientUser.getPokemons().add(new Lapras());}
+//			else if(name.equals("mewtwo")){myClientUser.getPokemons().add(new Mewtwo());}
+//			else if(name.equals("onix")){myClientUser.getPokemons().add(new Onix());}
+//			else if(name.equals("pidgeot")){myClientUser.getPokemons().add(new Pidgeot());}
+//			else if(name.equals("pikachu")){myClientUser.getPokemons().add(new Pikachu());}
+//			else if(name.equals("rapidash")){myClientUser.getPokemons().add(new Rapidash());}
+//			else if(name.equals("rhydon")){myClientUser.getPokemons().add(new Rhydon());}
+//			else if(name.equals("scyther")){myClientUser.getPokemons().add(new Scyther());}
+//			else if(name.equals("snorlax")){myClientUser.getPokemons().add(new Snorlax());}
+			return true;
+		} 
+		return false;
+	}
+	
+	public boolean removePokemon(String name) {
+		for(int i = 0; i < this.pokemons.size(); i++) {
+			if(this.pokemons.get(i).getName().equals(name)) {
+				this.pokemons.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Pokemon getPokemon(String name) {
+		for(Pokemon p : this.pokemons) {
+			if(p.getName().equals(name)) {
+				return p;
+			}
+		}
+		//not found
+		return null;
+	}
 	
 	public void print() {
 		System.out.println("ID: " + this.getID());

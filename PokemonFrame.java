@@ -139,6 +139,7 @@ public class PokemonFrame extends JFrame {
 		inner.setMaximumSize(new Dimension(780, 650));
 		
 		JButton [] arrButtons = new JButton [15];
+		
 		for (int i=0; i<15; i++) {
 //			System.out.println(pokemonImages.get(pokemonNames[i]));
 			ImageIcon myTest = pokemonImages.get(pokemonNames[i]);
@@ -159,35 +160,13 @@ public class PokemonFrame extends JFrame {
 						button.setBackground(Color.BLUE);
 						button.setOpaque(true);
 						String tempName = button.getText().toLowerCase();
-						// UNCOMMENT WHEN POKEMON SUBCLASSES EXIST
-//						if(tempName.equals("venosaur")){myClientUser.getPokemons().add(new Venosaur());}
-//						else if(tempName.equals("blastoise")){myClientUser.getPokemons().add(new Blastoise());}
-//						else if(tempName.equals("charizard")){myClientUser.getPokemons().add(new Charizard());}
-//						else if(tempName.equals("dragonite")){myClientUser.getPokemons().add(new Dragonite());}
-//						else if(tempName.equals("gyrados")){myClientUser.getPokemons().add(new Gyrados());}
-//						else if(tempName.equals("hitmonchan")){myClientUser.getPokemons().add(new Hitmonchan());}
-//						else if(tempName.equals("lapras")){myClientUser.getPokemons().add(new Lapras());}
-//						else if(tempName.equals("mewtwo")){myClientUser.getPokemons().add(new Mewtwo());}
-//						else if(tempName.equals("onix")){myClientUser.getPokemons().add(new Onix());}
-//						else if(tempName.equals("pidgeot")){myClientUser.getPokemons().add(new Pidgeot());}
-//						else if(tempName.equals("pikachu")){myClientUser.getPokemons().add(new Pikachu());}
-//						else if(tempName.equals("rapidash")){myClientUser.getPokemons().add(new Rapidash());}
-//						else if(tempName.equals("rhydon")){myClientUser.getPokemons().add(new Rhydon());}
-//						else if(tempName.equals("scyther")){myClientUser.getPokemons().add(new Scyther());}
-//						else if(tempName.equals("snorlax")){myClientUser.getPokemons().add(new Snorlax());}
-						
-						
+						myClientUser.addPokemon(tempName);
 					} else if (button.getBackground() == Color.BLUE) {
 						chosenPokemonCounter--;
 						button.setBackground(null);
 						button.setOpaque(false);
-						// won't work yet since pokemon never added since subclasses dont exist
-						for(int i = 0; i < myClientUser.getPokemons().size(); ++i){
-							if(myClientUser.getPokemons().get(i).getName().toLowerCase().equals(button.getText().toLowerCase())){
-								myClientUser.getPokemons().remove(i);
-								System.out.println("Removed " + button.getText() + " from users pokemon");
-							}
-						}
+						String tempName = button.getText().toLowerCase();
+						myClientUser.removePokemon(tempName);
 					}
 
 				}
@@ -196,13 +175,10 @@ public class PokemonFrame extends JFrame {
 		}
 		JButton submit = new JButton("Submit");
 		submit.addActionListener(new ActionListener(){
-			// add pokemon to user going through all the buttons 
-			// use arrButtons. check for blue (selected) buttons
-			// get text
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				cl.show(outerPanel, "Main Menu");
+				//Pokemon already added, no need to do anything
 			}
 
 		});
