@@ -29,8 +29,8 @@ public class ServerUser extends User implements Runnable {
 	public static final String USER = "root";
 	public static final String PASSWORD = "";
 	
-	public static final int STEROIDS_PRICE = 50;
-	public static final int MORPHINE_PRICE = 50;
+	public static final int STEROIDS_PRICE = 15;
+	public static final int MORPHINE_PRICE = 25;
 	public static final int EPINEPHRINE_PRICE = 50;
 	
 	private static ReentrantLock lock = new ReentrantLock();
@@ -305,6 +305,14 @@ public class ServerUser extends User implements Runnable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
+		}
+		// didn't have enough money, send failed message
+		else{
+			try {
+				out.writeObject(new PurchaseUpdate(this.getID(), this.getMoney(), false, 0, 0, 0));
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}

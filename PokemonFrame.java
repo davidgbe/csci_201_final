@@ -23,7 +23,7 @@ public class PokemonFrame extends JFrame {
 	PokemonFrame pk;
 	Battle currentBattle;
 	
-	JPanel outerPanel = new JPanel(new CardLayout());
+	public static JPanel outerPanel = new JPanel(new CardLayout());
 
 	// INSTANTIATE CARDS
 	JPanel signUpPanel = new JPanel();
@@ -32,15 +32,17 @@ public class PokemonFrame extends JFrame {
 	JPanel menuPanel = new JPanel();
 	JPanel chatPanel = new JPanel();
 	JPanel battlePanel = new JPanel();
+	static JPanel myBagPanel = new JPanel();
 	
 	JTextArea txt;
 	JTextArea write;
 	
-	CardLayout cl = (CardLayout)(outerPanel.getLayout());
+	public static CardLayout cl = (CardLayout)(outerPanel.getLayout());
 	
     ImageIcon logo = new ImageIcon("./images/logo.jpg");
     
 	//LAUREN ADDED NEW CARDS 
+	BagPanel bagPanel;
 	StorePanel storePanel;
 	JPanel waitingPanel = new JPanel();
 	JPanel choosePokemonPanel = new JPanel();
@@ -96,8 +98,10 @@ public class PokemonFrame extends JFrame {
 		
 		
 		//lauren adding cards
+		createBagPanel();
 		createStorePanel();
 		outerPanel.add(storePanel, "Store");
+		outerPanel.add(myBagPanel, "Bag");
 		noOpponentPanel();
 		outerPanel.add(waitingPanel, "Waiting");
 		choosePokemonPanel();
@@ -116,7 +120,9 @@ public class PokemonFrame extends JFrame {
 		cl.show(outerPanel, "Main Menu");
 	}
 	
-	
+	private void createBagPanel(){
+		this.bagPanel = new BagPanel(myClientUser);
+	}
 	private void createStorePanel(){  //Very ugly, but can't find out how to make it look better 
 		this.storePanel = new StorePanel(myClientUser, this);
 	}
@@ -210,7 +216,7 @@ public class PokemonFrame extends JFrame {
 	}
 	private void createChatPanel() {
 		txt = new JTextArea();
-		JTextArea write = new JTextArea();
+		final JTextArea write = new JTextArea();
 		JButton sendMessageButton = new JButton("Send");
         JScrollPane sp = new JScrollPane(txt);
         JScrollPane spwrite = new JScrollPane(write);
@@ -316,12 +322,10 @@ public class PokemonFrame extends JFrame {
 		JButton chat = new JButton("Chat"); 
 		
 		chat.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cl.show(outerPanel, "Chat");
 			}
-			
 		});
 		JLabel logoLabel = new JLabel(logo); 
 		logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT); 
@@ -355,6 +359,13 @@ public class PokemonFrame extends JFrame {
 		menuPanel.add(view); 
 		menuPanel.add(chat); 
 		
+		bag.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cl.show(outerPanel, "Bag");
+				bagPanel.update();
+			}
+		});
         choose.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
