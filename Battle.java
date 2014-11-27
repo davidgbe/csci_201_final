@@ -35,7 +35,7 @@ public class Battle extends JPanel {
 	
 	
 	private static final long serialVersionUID = 1L;
-	Battle(User user, User opponent) { 
+	Battle(ClientUser user) { 
 		setLayout(new BorderLayout());
 		setSize(800, 720); 
 
@@ -63,9 +63,6 @@ public class Battle extends JPanel {
 		bottomPanel.add(leftPanel, BorderLayout.EAST); 
 		bottomPanel.add(rightPanel, BorderLayout.WEST); 
 		
-		
-
-			
 		//display user image                                 
 		JLabel imageLabel1 = new JLabel(); 
 		ImageIcon myPokemonImage = new ImageIcon(); 
@@ -74,8 +71,8 @@ public class Battle extends JPanel {
 		
 		//display opponent image 
 		JLabel imageLabel2 = new JLabel(); 
-		ImageIcon opponentImage = new ImageIcon(); 
-		opponentImage = opponent.getCurrentPokemon().getPokemonImage(); 
+		ImageIcon opponentImage = new ImageIcon("images/" + user.opponentPokemon + ".png"); 
+		//opponentImage = new ImageIcon//opponent.getCurrentPokemon().getPokemonImage(); 
 		imageLabel2.setIcon(opponentImage);
 		
 		//display user health
@@ -87,12 +84,12 @@ public class Battle extends JPanel {
 		
 		//display opponent health
 		JLabel health2 = new JLabel(); 
-		double percentage2 = (opponent.getCurrentPokemon().getHealthPoints())/(opponent.getCurrentPokemon().getStrength());
+		double percentage2 = (user.opponentHealth/user.opponentStrength);
 		String healthpoints2 = Double.toString(percentage2); 
-		health2.setText(opponent.getCurrentPokemon().getName() + " " + healthpoints2+"%"); 
+		health2.setText(user.opponentPokemon + " " + healthpoints2+"%"); 
 		health2.setFont(new Font("Serif", Font.BOLD,25)); 
 
-		battleStatus.setText("What will " + opponent.getCurrentPokemon().getName() + " do?"); 
+		battleStatus.setText("What will " + user.opponentPokemon + " do?"); 
 		//THIS IS WHERE THE OPPONENT'S ATTACK WILL DISPLAY
 		
 		//Attacks Panel just displaying for now.

@@ -20,6 +20,7 @@ public class ServerUser extends User implements Runnable {
 	private Socket userSocket;
 	ObjectOutputStream out;
 	Vector<ServerUser> allUsers;
+	Server server;
 	
 	public static final String DB_ADDRESS = "jdbc:mysql://localhost/";
 	public static final String DB_NAME = "group_db";
@@ -33,10 +34,11 @@ public class ServerUser extends User implements Runnable {
 	
 	private static ReentrantLock lock = new ReentrantLock();
 	
-	public ServerUser(Socket s, Vector<ServerUser> allUsers) {
+	public ServerUser(Socket s, Vector<ServerUser> allUsers, Server server) {
 		super(-1, "", 0, 0, 0, new HashMap<String, Integer>());
 		this.userSocket = s;
 		this.allUsers = allUsers;
+		this.server = server;
 		try {
 			out = new ObjectOutputStream(s.getOutputStream());
 		} catch (IOException e) {
@@ -181,6 +183,20 @@ public class ServerUser extends User implements Runnable {
 		}
 	}
 	
+	public void startBattle(ServerUser opponent, boolean start) {
+		try {
+			Pokemon myPokemon =  this.getCurrentPokemon();
+			Pokemon oPokemon = opponent.getCurrentPokemon();
+			BattleData startData = new BattleData(this.getID(), myPokemon.getName(), oPokemon.getName(), myPokemon.getHealthPoints(), oPokemon.getHealthPoints(), myPokemon.getStrength(), oPokemon.getStrength());
+			if(!start) {
+				startData.setId(opponent.getID());
+			} 
+			out.writeObject(startData);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void parse(Message msg) {
 		if(msg instanceof Login) {
 			boolean succeeded = this.login(((Login) msg).getUsername(), ((Login) msg).getPassword(), null);
@@ -202,8 +218,7 @@ public class ServerUser extends User implements Runnable {
 			}
 		} else if(msg instanceof PurchaseUpdate) {
 			processPurchase((PurchaseUpdate)msg);
-		}
-		else if(msg instanceof ChatMessage){
+		} else if(msg instanceof ChatMessage){
 			System.out.println("Received chat message");
 			ChatMessage messageReceived = (ChatMessage)msg;
 			// forward message to all other users
@@ -216,6 +231,18 @@ public class ServerUser extends User implements Runnable {
 						e.printStackTrace();
 					}
 				}
+			}
+		} else if(msg instanceof QueueMe) {
+			this.server.addToQueue(this);
+		} else if(msg instanceof PokemonUpdate) {
+			String[] names = ((PokemonUpdate)msg).getPokemon();
+			for(String name : names) {
+				if(name != null) {
+					this.addPokemon(name);
+				}
+			}
+			if(names[0] != null) {
+				this.setCurrentPokemon(this.getPokemon(names[0]));
 			}
 		}
 	}

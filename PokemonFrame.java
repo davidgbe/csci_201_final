@@ -129,23 +129,12 @@ public class PokemonFrame extends JFrame {
 		Dimension button1Dimensions = waiting.getPreferredSize();
 		waiting.setBounds(this.getWidth()/2-57, this.getHeight()/2, button1Dimensions.width, button1Dimensions.height);
 		waitingPanel.add(waiting);
-		
-		
-		User u1 = new User();
-		u1.setUsername("Aneesha"); 
-		User opponent = new User (); 
-		opponent.setUsername("Isaac");
-		System.out.println("users created");
-
-		Pokemon pikachu = new Pokemon("pikachu", 100, pokemonImages.get("pikachu"), 400); 
-		Pokemon charizard = new Pokemon("charizard", 200, pokemonImages.get("charizard"), 500); 
-		u1.setCurrentPokemon(pikachu);
-		opponent.setCurrentPokemon(charizard);
-		System.out.println("pokemon created and set");
-
-		battlePanel.add(new Battle(u1, opponent));
-		System.out.println("battle panel added");
-		System.out.println("shown");
+	}
+	
+	public void showBattle() {
+		battlePanel.add(new Battle(myClientUser));
+		battlePanel.revalidate();
+		cl.show(outerPanel, "Battle");
 	}
 	
 	private void sendMessageToServer(Object objectToSend){
@@ -204,8 +193,8 @@ public class PokemonFrame extends JFrame {
 		submit.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				sendMessageToServer(new PokemonUpdate(myClientUser.getPokemonNames()));
 				cl.show(outerPanel, "Main Menu");
-				//Pokemon already added, no need to do anything
 			}
 
 		});
@@ -386,7 +375,8 @@ public class PokemonFrame extends JFrame {
 						    JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				cl.show(outerPanel, "Battle");
+				cl.show(outerPanel, "Waiting");
+				sendMessageToServer(new QueueMe());
 			}
         });
     }

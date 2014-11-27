@@ -15,6 +15,12 @@ public class ClientUser extends User implements Runnable{
 	ObjectOutputStream out;
 	PokemonFrame pk; 
 	
+	String opponentPokemon;
+	int opponentHealth;
+	double opponentStrength;
+	
+	boolean myTurn = false;
+	
 	public ClientUser(){
 		super();
 		
@@ -77,16 +83,27 @@ public class ClientUser extends User implements Runnable{
 		this.updateItem("epinephrine", user.getEpinephrine());
 	}
 	
+	private void processBattleData(BattleData bd) {
+		if(!this.isInBattle()) {
+			if(bd.getId() == this.getID()) {
+				myTurn = true;
+			}
+			this.opponentPokemon = bd.getOpponentPokemon();
+			this.opponentHealth = bd.getOpponentHealth(); 
+			this.opponentStrength = bd.getOpponentStrength();
+			this.setCurrentPokemon(this.getPokemon(bd.getMyPokemon()));
+		} else {
+			
+		}
+		this.pk.showBattle();
+	}
+	
 	public void run() {
 		
 		System.out.println("Client started listening for messages from server");
 		
 		while(true){
-			
-			
 			try{
-				
-				
 				// send a message every second
 				while(true){
 					
@@ -114,7 +131,6 @@ public class ClientUser extends User implements Runnable{
 									    JOptionPane.ERROR_MESSAGE);
 							}
 						}
-		
 						
 					} else if(objectReceived instanceof UserUpdate) {
 						this.update((UserUpdate)objectReceived);
@@ -128,9 +144,10 @@ public class ClientUser extends User implements Runnable{
 						} else {
 							//purchase failed stuff
 						}
-					}
-					else if(objectReceived instanceof ChatMessage){
+					} else if(objectReceived instanceof ChatMessage){
 						pk.addTextToChat((ChatMessage)objectReceived);
+					} else if(objectReceived instanceof BattleData) {
+						processBattleData((BattleData)objectReceived);
 					}
 						
 				}

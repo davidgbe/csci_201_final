@@ -16,7 +16,7 @@ public class User {
 	private HashMap<String, Integer> items;
 	private ArrayList<Pokemon> pokemons; 
 	private Pokemon current_pokemon; 
-	private boolean inBattle;
+	private boolean inBattle = false;
 	
 	public User(){
 		this.setItems(new HashMap<String, Integer>());
@@ -24,6 +24,7 @@ public class User {
 	}
 	
 	public User(int id, String username, int money, int wins, int losses, HashMap<String, Integer> items){
+		this.pokemons = new ArrayList<Pokemon>();
 		this.setUsername(username);
 		this.setMoney(money);
 		this.setWins(wins);
@@ -144,6 +145,14 @@ public class User {
 			return true;
 		} 
 		return false;
+	}
+	
+	public ArrayList<String> getPokemonNames() {
+		ArrayList<String> toReturn = new ArrayList<String>();
+		for(Pokemon p : this.pokemons) {
+			toReturn.add(p.getName());
+		}
+		return toReturn;
 	}
 	
 	public boolean removePokemon(String name) {
