@@ -1,12 +1,12 @@
 public class Attack{
-	private int id;
+	private int pokID;
 	private String name;
-	public Attack(int id, String name){
-		this.id = id;
+	public Attack(int pokID, String name){
+		this.pokID = pokID;
 		this.name = name;
 	}
-	public int getID(){
-		return this.id;
+	public int getPokemonID(){
+		return this.pokID;
 	}
 	public String getName(){
 		return this.name;
