@@ -253,7 +253,7 @@ public class ServerUser extends User implements Runnable {
 	
 	private void processAttack(Attack attack) {
 		Pokemon ocp = this.opponent.getCurrentPokemon();
-		ocp.setHealthPoints(ocp.getHealthPoints() - attack.getDamage());
+		//ocp.setHealthPoints(ocp.getHealthPoints() - attack.getDamage());
 		alertBothClientsOfAttack(attack.getName());
 	}
 	
