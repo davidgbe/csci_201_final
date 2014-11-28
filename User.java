@@ -14,14 +14,17 @@ public class User {
 	private int losses;
 	private int opponentId;
 	private HashMap<String, Integer> items;
-	protected ArrayList<Pokemon> pokemons; 
+	private ArrayList<Pokemon> pokemons; 
 	private Pokemon current_pokemon; 
+	private boolean inBattle = false;
 	
 	public User(){
 		this.setItems(new HashMap<String, Integer>());
+		pokemons = new ArrayList<Pokemon>();
 	}
 	
 	public User(int id, String username, int money, int wins, int losses, HashMap<String, Integer> items){
+		this.pokemons = new ArrayList<Pokemon>();
 		this.setUsername(username);
 		this.setMoney(money);
 		this.setWins(wins);
@@ -31,6 +34,14 @@ public class User {
 		} else {
 			this.setItems(new HashMap<String, Integer>());
 		}
+	}
+	
+	public boolean isInBattle() {
+		return inBattle;
+	}
+	
+	public void setInBattle(boolean inBattle) {
+		this.inBattle = inBattle;
 	}
 	
 	public int getID() {
@@ -93,6 +104,10 @@ public class User {
 		}
 	}
 	
+	public void setItemQuantity(String itemName, int quantity){
+			this.items.put(itemName, new Integer(quantity));
+	}
+	
 	public int getItemQuantity(String itemName) {
 		if(!this.items.containsKey(itemName)) {
 			System.out.println("MISSING: " + itemName);
@@ -113,7 +128,56 @@ public class User {
 	public ArrayList<Pokemon> getPokemons() {
 		return pokemons;
 	}
-
+	
+	public boolean addPokemon(String name) {
+		if(!this.pokemons.contains(name)) {
+			if(name.equals("venusaur")){pokemons.add(new Venusaur());}
+			else if(name.equals("blastoise")){pokemons.add(new Blastoise());}
+			else if(name.equals("charizard")){pokemons.add(new Charizard());}
+			else if(name.equals("dragonite")){pokemons.add(new Dragonite());}
+			else if(name.equals("gyarados")){pokemons.add(new Gyarados());}
+			else if(name.equals("hitmonchan")){pokemons.add(new Hitmonchan());}
+			else if(name.equals("lapras")){pokemons.add(new Lapras());}
+			else if(name.equals("mewtwo")){pokemons.add(new Mewtwo());}
+			else if(name.equals("onix")){pokemons.add(new Onix());}
+			else if(name.equals("pidgeot")){pokemons.add(new Pidgeot());}
+			else if(name.equals("pikachu")){pokemons.add(new Pikachu());}
+			else if(name.equals("rapidash")){pokemons.add(new Rapidash());}
+			else if(name.equals("rhydon")){pokemons.add(new Rhydon());}
+			else if(name.equals("scyther")){pokemons.add(new Scyther());}
+			else if(name.equals("snorlax")){pokemons.add(new Snorlax());}
+			return true;
+		} 
+		return false;
+	}
+	
+	public ArrayList<String> getPokemonNames() {
+		ArrayList<String> toReturn = new ArrayList<String>();
+		for(Pokemon p : this.pokemons) {
+			toReturn.add(p.getName());
+		}
+		return toReturn;
+	}
+	
+	public boolean removePokemon(String name) {
+		for(int i = 0; i < this.pokemons.size(); i++) {
+			if(this.pokemons.get(i).getName().equals(name)) {
+				this.pokemons.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Pokemon getPokemon(String name) {
+		for(Pokemon p : this.pokemons) {
+			if(p.getName().equals(name)) {
+				return p;
+			}
+		}
+		//not found
+		return null;
+	}
 	
 	public void print() {
 		System.out.println("ID: " + this.getID());
@@ -122,6 +186,10 @@ public class User {
 		System.out.println("Wins: " + this.getWins());
 		System.out.println("Losses: "+ this.getLosses());
 		System.out.println("OpponentID: " + this.getOpponentID());
+	}
+
+	public void setCurrentPokemon(Pokemon pokemon) { 
+		current_pokemon = pokemon; 
 	}
 	
 }

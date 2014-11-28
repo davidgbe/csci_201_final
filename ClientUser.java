@@ -15,9 +15,14 @@ public class ClientUser extends User implements Runnable{
 	ObjectOutputStream out;
 	PokemonFrame pk; 
 	
+	String opponentPokemon;
+	int opponentHealth;
+	double opponentStrength;
+	
+	boolean myTurn = false;
+	
 	public ClientUser(){
 		super();
-		pokemons = new ArrayList<Pokemon>();
 		
 		try {
 			//TODO: DO NOT HARDCODE LOCALHOST
@@ -78,16 +83,53 @@ public class ClientUser extends User implements Runnable{
 		this.updateItem("epinephrine", user.getEpinephrine());
 	}
 	
+	private void processBattleData(BattleData bd) {
+		if(!this.isInBattle()) {
+			if(bd.getId() == this.getID()) {
+				myTurn = true;
+			}
+			this.opponentPokemon = bd.getOpponentPokemon();
+			this.opponentHealth = bd.getOpponentHealth(); 
+			this.opponentStrength = bd.getOpponentStrength();
+			this.setCurrentPokemon(this.getPokemon(bd.getMyPokemon()));
+			this.pk.showBattle();
+			if(this.myTurn) {
+				this.pk.currentBattle.toggle();
+			}
+		} else {
+			if(bd.getType().equals("attack")) {
+				Pokemon myP = this.getCurrentPokemon();
+				if(bd.getId() == this.getID()) {
+					myP.setHealthPoints(bd.getMyHealth());
+					myP.setStrength(bd.getMyStrength());
+					this.opponentHealth = bd.getOpponentHealth();
+					this.opponentStrength = bd.getOpponentStrength();
+				} else {
+					myP.setHealthPoints(bd.getOpponentHealth());
+					myP.setStrength(bd.getOpponentStrength());
+					this.opponentHealth = bd.getMyHealth();
+					this.opponentStrength = bd.getMyStrength();
+				}
+// add proper code to update the battle
+//				this.pk.showBattle();
+			}
+		}
+	}
+	
+	public void sendMessageToServer(Object obj) {
+		try {
+			this.out.writeObject(obj);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void run() {
 		
 		System.out.println("Client started listening for messages from server");
 		
 		while(true){
-			
-			
 			try{
-				
-				
 				// send a message every second
 				while(true){
 					
@@ -115,20 +157,32 @@ public class ClientUser extends User implements Runnable{
 									    JOptionPane.ERROR_MESSAGE);
 							}
 						}
-		
 						
 					} else if(objectReceived instanceof UserUpdate) {
 						this.update((UserUpdate)objectReceived);
 					} else if(objectReceived instanceof PurchaseUpdate) {
 						if(((PurchaseUpdate) objectReceived).isSuccessful()) {
 							this.setMoney(((PurchaseUpdate) objectReceived).getMoney());
-							this.updateItem("steroids", ((PurchaseUpdate) objectReceived).getSteroids());
-							this.updateItem("morphine", ((PurchaseUpdate) objectReceived).getMorphine());
-							this.updateItem("epinephrine", ((PurchaseUpdate) objectReceived).getEpinephrine());
+							this.setItemQuantity("steroids", ((PurchaseUpdate) objectReceived).getSteroids());
+							this.setItemQuantity("morphine", ((PurchaseUpdate) objectReceived).getMorphine());
+							this.setItemQuantity("epinephrine", ((PurchaseUpdate) objectReceived).getEpinephrine());
 							this.pk.storePanel.update();
+								JOptionPane.showMessageDialog(pk,
+									    "Successfully purchased",
+									    "",
+									    JOptionPane.INFORMATION_MESSAGE);
+							
 						} else {
-							//purchase failed stuff
+								JOptionPane.showMessageDialog(pk,
+									    "You do not have enough gold",
+									    "Error",
+									    JOptionPane.ERROR_MESSAGE);
+				
 						}
+					} else if(objectReceived instanceof ChatMessage){
+						pk.addTextToChat((ChatMessage)objectReceived);
+					} else if(objectReceived instanceof BattleData) {
+						processBattleData((BattleData)objectReceived);
 					}
 						
 				}

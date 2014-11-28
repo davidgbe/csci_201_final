@@ -21,8 +21,9 @@ public class PokemonFrame extends JFrame {
 	
 	ClientUser myClientUser;
 	PokemonFrame pk;
+	Battle currentBattle;
 	
-	JPanel outerPanel = new JPanel(new CardLayout());
+	public static JPanel outerPanel = new JPanel(new CardLayout());
 
 	// INSTANTIATE CARDS
 	JPanel signUpPanel = new JPanel();
@@ -30,12 +31,18 @@ public class PokemonFrame extends JFrame {
 	JPanel startPanel = new JPanel();
 	JPanel menuPanel = new JPanel();
 	JPanel chatPanel = new JPanel();
+	JPanel battlePanel = new JPanel();
+	static JPanel myBagPanel = new JPanel();
 	
-	CardLayout cl = (CardLayout)(outerPanel.getLayout());
+	JTextArea txt;
+	JTextArea write;
+	
+	public static CardLayout cl = (CardLayout)(outerPanel.getLayout());
 	
     ImageIcon logo = new ImageIcon("./images/logo.jpg");
     
 	//LAUREN ADDED NEW CARDS 
+	BagPanel bagPanel;
 	StorePanel storePanel;
 	JPanel waitingPanel = new JPanel();
 	JPanel choosePokemonPanel = new JPanel();
@@ -82,6 +89,7 @@ public class PokemonFrame extends JFrame {
 		
 		
 		// ADD CARDS TO OUTERPANEL
+		outerPanel.add(battlePanel, "Battle");
 		outerPanel.add(chatPanel, "Chat");
 		outerPanel.add(signUpPanel, "Sign Up");
 		outerPanel.add(menuPanel, "Main Menu");
@@ -90,8 +98,10 @@ public class PokemonFrame extends JFrame {
 		
 		
 		//lauren adding cards
+		createBagPanel();
 		createStorePanel();
 		outerPanel.add(storePanel, "Store");
+		outerPanel.add(myBagPanel, "Bag");
 		noOpponentPanel();
 		outerPanel.add(waitingPanel, "Waiting");
 		choosePokemonPanel();
@@ -110,7 +120,9 @@ public class PokemonFrame extends JFrame {
 		cl.show(outerPanel, "Main Menu");
 	}
 	
-	
+	private void createBagPanel(){
+		this.bagPanel = new BagPanel(myClientUser);
+	}
 	private void createStorePanel(){  //Very ugly, but can't find out how to make it look better 
 		this.storePanel = new StorePanel(myClientUser, this);
 	}
@@ -124,10 +136,25 @@ public class PokemonFrame extends JFrame {
 		Dimension button1Dimensions = waiting.getPreferredSize();
 		waiting.setBounds(this.getWidth()/2-57, this.getHeight()/2, button1Dimensions.width, button1Dimensions.height);
 		waitingPanel.add(waiting);
-		
-		
-		
-		add(waitingPanel);
+	}
+	
+	public void showBattle() {
+		if(currentBattle != null) {
+			battlePanel.remove(currentBattle);
+		}
+		currentBattle = new Battle(myClientUser);
+		battlePanel.add(currentBattle);
+		battlePanel.revalidate();
+		cl.show(outerPanel, "Battle");
+	}
+	
+	private void sendMessageToServer(Object objectToSend){
+		try {
+			myClientUser.getOutputStream().writeObject(objectToSend);
+		} catch (IOException e1) {
+
+			e1.printStackTrace();
+		}
 	}
 	private void choosePokemonPanel(){ //cant get image to show, but rough outline is there. I have thoughts on how to make the selection of only 6 work...see below
 		
@@ -139,6 +166,7 @@ public class PokemonFrame extends JFrame {
 		inner.setMaximumSize(new Dimension(780, 650));
 		
 		JButton [] arrButtons = new JButton [15];
+		
 		for (int i=0; i<15; i++) {
 //			System.out.println(pokemonImages.get(pokemonNames[i]));
 			ImageIcon myTest = pokemonImages.get(pokemonNames[i]);
@@ -159,35 +187,13 @@ public class PokemonFrame extends JFrame {
 						button.setBackground(Color.BLUE);
 						button.setOpaque(true);
 						String tempName = button.getText().toLowerCase();
-						// UNCOMMENT WHEN POKEMON SUBCLASSES EXIST
-//						if(tempName.equals("venosaur")){myClientUser.getPokemons().add(new Venosaur());}
-//						else if(tempName.equals("blastoise")){myClientUser.getPokemons().add(new Blastoise());}
-//						else if(tempName.equals("charizard")){myClientUser.getPokemons().add(new Charizard());}
-//						else if(tempName.equals("dragonite")){myClientUser.getPokemons().add(new Dragonite());}
-//						else if(tempName.equals("gyrados")){myClientUser.getPokemons().add(new Gyrados());}
-//						else if(tempName.equals("hitmonchan")){myClientUser.getPokemons().add(new Hitmonchan());}
-//						else if(tempName.equals("lapras")){myClientUser.getPokemons().add(new Lapras());}
-//						else if(tempName.equals("mewtwo")){myClientUser.getPokemons().add(new Mewtwo());}
-//						else if(tempName.equals("onix")){myClientUser.getPokemons().add(new Onix());}
-//						else if(tempName.equals("pidgeot")){myClientUser.getPokemons().add(new Pidgeot());}
-//						else if(tempName.equals("pikachu")){myClientUser.getPokemons().add(new Pikachu());}
-//						else if(tempName.equals("rapidash")){myClientUser.getPokemons().add(new Rapidash());}
-//						else if(tempName.equals("rhydon")){myClientUser.getPokemons().add(new Rhydon());}
-//						else if(tempName.equals("scyther")){myClientUser.getPokemons().add(new Scyther());}
-//						else if(tempName.equals("snorlax")){myClientUser.getPokemons().add(new Snorlax());}
-						
-						
+						myClientUser.addPokemon(tempName);
 					} else if (button.getBackground() == Color.BLUE) {
 						chosenPokemonCounter--;
 						button.setBackground(null);
 						button.setOpaque(false);
-						// won't work yet since pokemon never added since subclasses dont exist
-						for(int i = 0; i < myClientUser.getPokemons().size(); ++i){
-							if(myClientUser.getPokemons().get(i).getName().toLowerCase().equals(button.getText().toLowerCase())){
-								myClientUser.getPokemons().remove(i);
-								System.out.println("Removed " + button.getText() + " from users pokemon");
-							}
-						}
+						String tempName = button.getText().toLowerCase();
+						myClientUser.removePokemon(tempName);
 					}
 
 				}
@@ -196,12 +202,9 @@ public class PokemonFrame extends JFrame {
 		}
 		JButton submit = new JButton("Submit");
 		submit.addActionListener(new ActionListener(){
-			// add pokemon to user going through all the buttons 
-			// use arrButtons. check for blue (selected) buttons
-			// get text
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				sendMessageToServer(new PokemonUpdate(myClientUser.getPokemonNames()));
 				cl.show(outerPanel, "Main Menu");
 			}
 
@@ -212,8 +215,8 @@ public class PokemonFrame extends JFrame {
 		add(choosePokemonPanel);
 	}
 	private void createChatPanel() {
-		JTextArea txt = new JTextArea();
-		JTextArea write = new JTextArea();
+		txt = new JTextArea();
+		final JTextArea write = new JTextArea();
 		JButton sendMessageButton = new JButton("Send");
         JScrollPane sp = new JScrollPane(txt);
         JScrollPane spwrite = new JScrollPane(write);
@@ -229,20 +232,26 @@ public class PokemonFrame extends JFrame {
 		jp.add(spwrite);
 		jp.add(sendMessageButton);
 		chatPanel.add(jp, BorderLayout.SOUTH);
+		
 		class SendMessage implements ActionListener {
-			JTextArea txt;
-			JTextArea write;
-			public SendMessage(JTextArea txt, JTextArea write){
-				this.txt = txt;
-				this.write = write;
+			
+			public SendMessage(){
 			}
 		    public void actionPerformed(ActionEvent e) {
 		        String text = write.getText();
-		        txt.append(text + "\n");
+		        System.out.println("my username:" + myClientUser.getUsername());
+		        ChatMessage messageToSend = new ChatMessage(write.getText(), myClientUser.getUsername());
+		        sendMessageToServer(messageToSend);
+		        txt.append(myClientUser.getUsername() + ": " + text + "\n");
 		        write.setText("");
 		    }
 		}
-		sendMessageButton.addActionListener(new SendMessage(txt, write));
+		sendMessageButton.addActionListener(new SendMessage());
+	}
+	
+	public void addTextToChat(ChatMessage chatmsg){
+		txt.append(chatmsg.getUsernameMessageIsFrom() + ": " + chatmsg.getMessageContents() + "\n");
+		
 	}
 	private void createSignUpPanel() {
 		JPanel jp = new JPanel();
@@ -305,7 +314,7 @@ public class PokemonFrame extends JFrame {
         signUpPanel.add(jp, BorderLayout.CENTER);
 	}
 	private void createMenuPanel() {
-		JButton choose = new JButton("Choose Pokémon"); 
+		JButton choose = new JButton("Choose Pokemon"); 
 		JButton store = new JButton("Go to item store"); 
 		JButton bag = new JButton("View Bag"); 
 		JButton join = new JButton("Join Game");
@@ -313,12 +322,10 @@ public class PokemonFrame extends JFrame {
 		JButton chat = new JButton("Chat"); 
 		
 		chat.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cl.show(outerPanel, "Chat");
 			}
-			
 		});
 		JLabel logoLabel = new JLabel(logo); 
 		logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT); 
@@ -352,6 +359,13 @@ public class PokemonFrame extends JFrame {
 		menuPanel.add(view); 
 		menuPanel.add(chat); 
 		
+		bag.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cl.show(outerPanel, "Bag");
+				bagPanel.update();
+			}
+		});
         choose.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -369,9 +383,16 @@ public class PokemonFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// while another opponent is not available
+//				cl.show(outerPanel, "Waiting");
+				if(myClientUser.getPokemons().size() <= 0){
+					JOptionPane.showMessageDialog(pk,
+						    "You must select at least one pokemon before going into battle!",
+						    "Error",
+						    JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				cl.show(outerPanel, "Waiting");
-				
-				// cl.show(Battle);
+				sendMessageToServer(new QueueMe());
 			}
         });
     }

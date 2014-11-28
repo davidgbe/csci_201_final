@@ -22,12 +22,19 @@ public class StorePanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		
 		this.mainPanel = new JPanel();
-		
+		JButton home = new JButton("Home");
+		home.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PokemonFrame.cl.show(PokemonFrame.outerPanel, "Main Menu");
+			}
+		});
+		mainPanel.add(home);
 		myGold = new JLabel("XXXX gold");
 		
-		JButton boost = new JButton("Steroids (Boost)");
-		JButton heal = new JButton("Morphine (Heal)");
-		JButton revive = new JButton("Epinephrine (Revive)");
+		JButton boost = new JButton("Steroids (Boost) - 15 Gold");
+		JButton heal = new JButton("Morphine (Heal) - 25 Gold");
+		JButton revive = new JButton("Epinephrine (Revive) - 50 Gold");
 		myGold.setAlignmentX(Component.CENTER_ALIGNMENT); 
 
 		mainPanel.add(myGold); 
@@ -61,6 +68,7 @@ public class StorePanel extends JPanel {
 		
 		
 		this.mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+		
 		mainPanel.add(boost); 
 		mainPanel.add(heal); 
 		mainPanel.add(revive); 
@@ -71,7 +79,7 @@ public class StorePanel extends JPanel {
 	
 	public void update() {
 		this.myGold.setText(myClientUser.getMoney() + " Gold");
-		System.out.println("getting called");
+		System.out.println("Updating store panel");
 		this.revalidate();
 	}
 }

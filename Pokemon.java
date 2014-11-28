@@ -13,7 +13,7 @@ public class Pokemon{
 		this.pokemonImage = image;
 		this.strength = strength;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

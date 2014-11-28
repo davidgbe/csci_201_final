@@ -4,6 +4,12 @@ public class ChatMessage extends Message{
 	private String messageContents;
 	private String recipient;
 	
+	public ChatMessage(String contents, String fromUser){
+		
+	this.messageContents = contents;
+	this.messageFrom  = fromUser;
+	}
+	
 	public boolean isGlobalMessage() {
 		return isGlobalMessage;
 	}

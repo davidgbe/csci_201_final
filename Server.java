@@ -18,7 +18,8 @@ public class Server {
 			ServerSocket ss= new ServerSocket(1234);
 			while(true){
 				Socket userSocket = ss.accept();
-				ServerUser ut = new ServerUser(userSocket);
+				ServerUser ut = new ServerUser(userSocket, allUsers, this);
+				allUsers.add(ut);
 				new Thread(ut).start();
 			}
 		} catch (IOException ioe) {
@@ -53,8 +54,8 @@ public class Server {
 				ServerUser user2 = queue.get(1);
 				user1.setOpponentID(user2.getID());
 				user2.setOpponentID(user1.getID());
-				//user1.startBattle();
-				//user2.startBattle();
+				user1.startBattle(user2, true);
+				user2.startBattle(user1, false);
 				queue.remove(1);
 				queue.remove(0);
 			}

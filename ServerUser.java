@@ -1,3 +1,4 @@
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.Vector;
 import java.util.concurrent.locks.ReentrantLock;
 
 
@@ -17,6 +19,9 @@ public class ServerUser extends User implements Runnable {
 	
 	private Socket userSocket;
 	ObjectOutputStream out;
+	Vector<ServerUser> allUsers;
+	Server server;
+	ServerUser opponent;
 	
 	public static final String DB_ADDRESS = "jdbc:mysql://localhost/";
 	public static final String DB_NAME = "group_db";
@@ -24,15 +29,17 @@ public class ServerUser extends User implements Runnable {
 	public static final String USER = "root";
 	public static final String PASSWORD = "";
 	
-	public static final int STEROIDS_PRICE = 50;
-	public static final int MORPHINE_PRICE = 50;
+	public static final int STEROIDS_PRICE = 15;
+	public static final int MORPHINE_PRICE = 25;
 	public static final int EPINEPHRINE_PRICE = 50;
 	
 	private static ReentrantLock lock = new ReentrantLock();
 	
-	public ServerUser(Socket s) {
+	public ServerUser(Socket s, Vector<ServerUser> allUsers, Server server) {
 		super(-1, "", 0, 0, 0, new HashMap<String, Integer>());
 		this.userSocket = s;
+		this.allUsers = allUsers;
+		this.server = server;
 		try {
 			out = new ObjectOutputStream(s.getOutputStream());
 		} catch (IOException e) {
@@ -177,6 +184,21 @@ public class ServerUser extends User implements Runnable {
 		}
 	}
 	
+	public void startBattle(ServerUser opponent, boolean start) {
+		try {
+			Pokemon myPokemon =  this.getCurrentPokemon();
+			Pokemon oPokemon = opponent.getCurrentPokemon();
+			this.opponent = opponent;
+			BattleData startData = new BattleData(this.getID(), myPokemon.getName(), oPokemon.getName(), myPokemon.getHealthPoints(), oPokemon.getHealthPoints(), myPokemon.getStrength(), oPokemon.getStrength());
+			if(!start) {
+				startData.setId(opponent.getID());
+			} 
+			out.writeObject(startData);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void parse(Message msg) {
 		if(msg instanceof Login) {
 			boolean succeeded = this.login(((Login) msg).getUsername(), ((Login) msg).getPassword(), null);
@@ -191,12 +213,64 @@ public class ServerUser extends User implements Runnable {
 			boolean succeeded = this.createUser(((NewUser) msg).getUsername(), ((NewUser) msg).getPassword());
 			try {
 				out.writeObject(new LoginAuthenticated(succeeded, true));
+				UserUpdate uu = new UserUpdate(this.getID(), this.getUsername(), this.getMoney(), this.getWins(), this.getLosses(), this.getOpponentID(), this.getItemQuantity("steroids"), this.getItemQuantity("morphine"), this.getItemQuantity("epinephrine"));
+				out.writeObject(uu);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else if(msg instanceof PurchaseUpdate) {
 			processPurchase((PurchaseUpdate)msg);
+		} else if(msg instanceof ChatMessage){
+			System.out.println("Received chat message");
+			ChatMessage messageReceived = (ChatMessage)msg;
+			// forward message to all other users
+			for(int i = 0; i < allUsers.size(); ++i){
+				if(!(allUsers.get(i) == this)){
+					try {
+						allUsers.get(i).out.writeObject(messageReceived);
+						System.out.println("Forwarded message to a user");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		} else if(msg instanceof QueueMe) {
+			this.server.addToQueue(this);
+		} else if(msg instanceof PokemonUpdate) {
+			String[] names = ((PokemonUpdate)msg).getPokemon();
+			for(String name : names) {
+				if(name != null) {
+					this.addPokemon(name);
+				}
+			}
+			if(names[0] != null) {
+				this.setCurrentPokemon(this.getPokemon(names[0]));
+			}
+		} else if(msg instanceof Attack) {
+			processAttack((Attack)msg);
 		}
+	}
+	
+	private void processAttack(Attack attack) {
+		Pokemon ocp = this.opponent.getCurrentPokemon();
+		//ocp.setHealthPoints(ocp.getHealthPoints() - attack.getDamage());
+		alertBothClientsOfAttack(attack.getName());
+	}
+	
+	private void alertBothClientsOfAttack(String attackName) {
+		Pokemon myP = this.getCurrentPokemon();
+		Pokemon oP = this.opponent.getCurrentPokemon();
+		BattleData bd = new BattleData(this.getID(), attackName, false, false, myP.getHealthPoints(), oP.getHealthPoints(), myP.getStrength(), oP.getStrength());
+		this.sendMessageToClient(bd);
+		this.opponent.sendMessageToClient(bd);
+	}
+	
+	private void alertBothClientsOfItem() {
+		
+	}
+	
+	private void alertBothClientsOfSwitch() {
+		
 	}
 
 	private void processPurchase(PurchaseUpdate pu) {
@@ -233,6 +307,22 @@ public class ServerUser extends User implements Runnable {
 				}
 			}
 		}
+		// didn't have enough money, send failed message
+		else{
+			try {
+				out.writeObject(new PurchaseUpdate(this.getID(), this.getMoney(), false, 0, 0, 0));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void sendMessageToClient(Object obj) {
+		try {
+			this.out.writeObject(obj);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void run() {
@@ -246,13 +336,22 @@ public class ServerUser extends User implements Runnable {
 				}
 			}
 			
+		} catch(EOFException eofe) {
+			if(this.isInBattle()) {
+				//exit battle
+			}
+			//disconnect stuff
 		} catch (Exception ioe) {
 			System.out.println("IOException in ServerUser run method: " + ioe.getMessage());
+
+			allUsers.remove(this);
+			System.out.println(this.getUsername() + " quit");
+			
 			// don't print stack trace for a user simply quiting the program
 			if(!(ioe instanceof SocketException)){
 				ioe.printStackTrace();
 			}
-		}
+		} 
 	}
 
 }
