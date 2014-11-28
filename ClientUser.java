@@ -163,9 +163,9 @@ public class ClientUser extends User implements Runnable{
 					} else if(objectReceived instanceof PurchaseUpdate) {
 						if(((PurchaseUpdate) objectReceived).isSuccessful()) {
 							this.setMoney(((PurchaseUpdate) objectReceived).getMoney());
-							this.updateItem("steroids", ((PurchaseUpdate) objectReceived).getSteroids());
-							this.updateItem("morphine", ((PurchaseUpdate) objectReceived).getMorphine());
-							this.updateItem("epinephrine", ((PurchaseUpdate) objectReceived).getEpinephrine());
+							this.setItemQuantity("steroids", ((PurchaseUpdate) objectReceived).getSteroids());
+							this.setItemQuantity("morphine", ((PurchaseUpdate) objectReceived).getMorphine());
+							this.setItemQuantity("epinephrine", ((PurchaseUpdate) objectReceived).getEpinephrine());
 							this.pk.storePanel.update();
 								JOptionPane.showMessageDialog(pk,
 									    "Successfully purchased",

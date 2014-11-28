@@ -79,7 +79,7 @@ public class StorePanel extends JPanel {
 	
 	public void update() {
 		this.myGold.setText(myClientUser.getMoney() + " Gold");
-		System.out.println("getting called");
+		System.out.println("Updating store panel");
 		this.revalidate();
 	}
 }

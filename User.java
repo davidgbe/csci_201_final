@@ -104,6 +104,10 @@ public class User {
 		}
 	}
 	
+	public void setItemQuantity(String itemName, int quantity){
+			this.items.put(itemName, new Integer(quantity));
+	}
+	
 	public int getItemQuantity(String itemName) {
 		if(!this.items.containsKey(itemName)) {
 			System.out.println("MISSING: " + itemName);
