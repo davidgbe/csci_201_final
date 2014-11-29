@@ -41,9 +41,28 @@ public class Battle extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
+	// data for updating UI
+	JLabel imageLabel1; 
+	ImageIcon myPokemonImage;
+	JLabel imageLabel2;
+	ImageIcon opponentImage;
+	JLabel health1;
+	double percentage;
+	String healthpoints1; 
+	JLabel health2;
+	double percentage2;
+	String healthpoints2; 
+	JButton attack1;
+	JButton attack2;
+	JButton attack3;
+	JButton attack4;
+	
+	ClientUser user;
+	
 	Battle(ClientUser user) { 
 		setLayout(new BorderLayout());
 		setSize(800, 720); 
+		this.user = user;
 
 		battlePanel.setBackground(Color.RED); 
 		opponentPanel.setBackground(Color.BLUE);
@@ -70,29 +89,30 @@ public class Battle extends JPanel {
 		bottomPanel.add(rightPanel, BorderLayout.WEST); 
 		
 		//display user image                                 
-		JLabel imageLabel1 = new JLabel(); 
-		ImageIcon myPokemonImage = new ImageIcon(); 
+		imageLabel1 = new JLabel(); 
+		myPokemonImage = new ImageIcon(); 
 		myPokemonImage = user.getCurrentPokemon().getPokemonImage(); 
 		imageLabel1.setIcon(myPokemonImage); 
 		
 		//display opponent image 
-		JLabel imageLabel2 = new JLabel(); 
-		ImageIcon opponentImage = new ImageIcon("images/" + user.opponentPokemon + ".png"); 
+		imageLabel2 = new JLabel(); 
+		opponentImage = new ImageIcon("images/" + user.opponentPokemon + ".png"); 
 		//opponentImage = new ImageIcon//opponent.getCurrentPokemon().getPokemonImage(); 
 		imageLabel2.setIcon(opponentImage);
 		
 		//display user health
-		JLabel health1 = new JLabel(); 
-		double percentage = (user.getCurrentPokemon().getHealthPoints())/(user.getCurrentPokemon().getStrength());
-		String healthpoints1 = Double.toString(percentage); 
-		health1.setText(user.getCurrentPokemon().getName() + " "+  healthpoints1+"%");
+		health1 = new JLabel(); 
+		percentage = (user.getCurrentPokemon().getHealthPoints()/user.getCurrentPokemon().getTotalHealthPoints());
+		healthpoints1 = Double.toString(percentage*100.0); 
+		health1.setText(user.getCurrentPokemon().getName() + " "+  healthpoints1 + "%");
 		health1.setFont(new Font("Serif", Font.BOLD, 25));
 		
 		//display opponent health
-		JLabel health2 = new JLabel(); 
-		double percentage2 = (user.opponentHealth/user.opponentStrength);
-		String healthpoints2 = Double.toString(percentage2); 
-		health2.setText(user.opponentPokemon + " " + healthpoints2+"%"); 
+		health2 = new JLabel(); 
+		double totalHealthOfOpponentsPokemon = Pokemon.getPokemonObjectFromName(user.opponentPokemon).getTotalHealthPoints();
+		percentage2 = (user.opponentHealth/totalHealthOfOpponentsPokemon);
+		healthpoints2 = Double.toString(percentage2*100.0); 
+		health2.setText(user.opponentPokemon + " " + healthpoints2 + "%"); 
 		health2.setFont(new Font("Serif", Font.BOLD,25)); 
 
 		battleStatus.setText("What will " + user.opponentPokemon + " do?"); 
@@ -101,10 +121,10 @@ public class Battle extends JPanel {
 		//Attacks Panel just displaying for now.
 		// get pokemon's attacks
 		attacksPanel.setLayout(new GridLayout(2, 2));
-		JButton attack1 = new JButton("Attack1");
-		JButton attack2 = new JButton("Attack2");
-		JButton attack3 = new JButton("Attack3");
-		JButton attack4 = new JButton("Attack4");
+		attack1 = new JButton(user.getCurrentPokemon().allAttacks[0]);
+		attack2 = new JButton(user.getCurrentPokemon().allAttacks[1]);
+		attack3 = new JButton(user.getCurrentPokemon().allAttacks[2]);
+		attack4 = new JButton(user.getCurrentPokemon().allAttacks[3]);
 		attacksPanel.add(attack1);
 		attacksPanel.add(attack2);
 		attacksPanel.add(attack3);
@@ -175,6 +195,32 @@ public class Battle extends JPanel {
 			// user needs to wait for opponent to send an attack.
 			// user needs to receive attack
 		}
-	}	
+	}
+	
+	public void updateBattleUI(){
+		// IS NEVER CALLED YET, call after each battle message from server is parsed
+		
+		myPokemonImage = user.getCurrentPokemon().getPokemonImage(); 
+		imageLabel1.setIcon(myPokemonImage); 
+		
+		opponentImage = new ImageIcon("images/" + user.opponentPokemon + ".png");  
+		imageLabel2.setIcon(opponentImage);
+		 
+		percentage = (user.getCurrentPokemon().getHealthPoints()/user.getCurrentPokemon().getTotalHealthPoints());
+		healthpoints1 = Double.toString(percentage*100.0); 
+		health1.setText(user.getCurrentPokemon().getName() + " "+  healthpoints1 + "%");
+
+		double totalHealthOfOpponentsPokemon = Pokemon.getPokemonObjectFromName(user.opponentPokemon).getTotalHealthPoints();
+		percentage2 = (user.opponentHealth/totalHealthOfOpponentsPokemon);
+		healthpoints2 = Double.toString(percentage2*100.0);
+		health2.setText(user.opponentPokemon + " " + healthpoints2 + "%");  
+
+		battleStatus.setText("What will " + user.opponentPokemon + " do?"); 
+
+		attack1.setText(user.getCurrentPokemon().allAttacks[0]);
+		attack2.setText(user.getCurrentPokemon().allAttacks[1]);
+		attack3.setText(user.getCurrentPokemon().allAttacks[2]);
+		attack4.setText(user.getCurrentPokemon().allAttacks[3]);
+	}
 
 }
