@@ -142,7 +142,7 @@ public class PokemonFrame extends JFrame {
 		if(currentBattle != null) {
 			battlePanel.remove(currentBattle);
 		}
-		currentBattle = new Battle(myClientUser);
+		currentBattle = new Battle(myClientUser, this);
 		battlePanel.add(currentBattle);
 		battlePanel.revalidate();
 		cl.show(outerPanel, "Battle");

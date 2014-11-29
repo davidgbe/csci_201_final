@@ -85,6 +85,7 @@ public class ClientUser extends User implements Runnable{
 	
 	private void processBattleData(BattleData bd) {
 		if(!this.isInBattle()) {
+			this.setInBattle(true);
 			if(bd.getId() == this.getID()) {
 				myTurn = true;
 			}
@@ -110,8 +111,16 @@ public class ClientUser extends User implements Runnable{
 					this.opponentHealth = bd.getMyHealth();
 					this.opponentStrength = bd.getMyStrength();
 				}
+				pk.currentBattle.updateBattleUI();
 // add proper code to update the battle
 //				this.pk.showBattle();
+			}
+			else if(bd.getType().equals("item")){
+				if(bd.getItemName().equals("morphine")){
+					this.opponentHealth = bd.getOpponentHealth();
+					pk.currentBattle.updateBattleUI();
+					pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used morphine! Health increased by 200");
+				}
 			}
 		}
 	}
@@ -183,7 +192,12 @@ public class ClientUser extends User implements Runnable{
 						pk.addTextToChat((ChatMessage)objectReceived);
 					} else if(objectReceived instanceof BattleData) {
 						processBattleData((BattleData)objectReceived);
+					}else if(objectReceived instanceof SendOpponentId) {
+						SendOpponentId msg = (SendOpponentId)objectReceived;
+						this.setOpponentID(msg.getIDOfOpponent());
+						System.out.println("Opponent id:" + this.getOpponentID());
 					}
+					
 						
 				}
 			}

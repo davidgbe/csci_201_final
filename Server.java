@@ -56,6 +56,8 @@ public class Server {
 				user2.setOpponentID(user1.getID());
 				user1.startBattle(user2, true);
 				user2.startBattle(user1, false);
+				user1.sendMessageToClient(new SendOpponentId(user2.getID()));
+				user2.sendMessageToClient(new SendOpponentId(user1.getID()));
 				queue.remove(1);
 				queue.remove(0);
 			}
