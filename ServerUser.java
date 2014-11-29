@@ -248,6 +248,8 @@ public class ServerUser extends User implements Runnable {
 			}
 		} else if(msg instanceof Attack) {
 			processAttack((Attack)msg);
+		}else if(msg instanceof BattleData){
+			forwardBattleData((BattleData)msg);
 		}
 	}
 	
@@ -255,6 +257,20 @@ public class ServerUser extends User implements Runnable {
 		Pokemon ocp = this.opponent.getCurrentPokemon();
 		//ocp.setHealthPoints(ocp.getHealthPoints() - attack.getDamage());
 		alertBothClientsOfAttack(attack.getName());
+	}
+	
+	private void forwardBattleData(BattleData bd){
+		if(bd.getType().equals("item")){
+			if(bd.getItemName().equals("morphine")){
+				//forwards bd to the user it's directed at
+				server.getUserByID(bd.getId()).sendMessageToClient(bd);
+			}
+		}
+		
+	}
+	
+	private void processItemUse(BattleData bd){
+		
 	}
 	
 	private void alertBothClientsOfAttack(String attackName) {
