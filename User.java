@@ -151,6 +151,7 @@ public class User {
 		return false;
 	}
 	
+	
 	public ArrayList<String> getPokemonNames() {
 		ArrayList<String> toReturn = new ArrayList<String>();
 		for(Pokemon p : this.pokemons) {
