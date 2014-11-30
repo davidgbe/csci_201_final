@@ -505,7 +505,7 @@ public class PokemonFrame extends JFrame {
 		cl.show(outerPanel, "Main Menu");
 		myClientUser.getPokemons().clear();
 		myClientUser.setCurrentPokemon(null);
-		currentBattle = null;
+		myClientUser.setInBattle(false);
 		for(int i = 0; i < 15; ++i){
 			arrButtons[i].setBackground(null);
 			arrButtons[i].setOpaque(false);
