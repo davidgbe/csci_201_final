@@ -216,39 +216,43 @@ public class PokemonFrame extends JFrame {
 		add(choosePokemonPanel);
 	}
 	private void createChatPanel() {
-		txt = new JTextArea();
-		final JTextArea write = new JTextArea();
+		JButton back = new JButton("Back to Main Menu"); 
+		JTextArea txt = new JTextArea();
+		JTextArea write = new JTextArea();
 		JButton sendMessageButton = new JButton("Send");
         JScrollPane sp = new JScrollPane(txt);
         JScrollPane spwrite = new JScrollPane(write);
         txt.setLineWrap(true);
         write.setLineWrap(true);
 
-
-        sp.setPreferredSize(new Dimension(780,600));
-        spwrite.setPreferredSize(new Dimension(700,60));
+        sp.setPreferredSize(new Dimension(780,580));
+        spwrite.setPreferredSize(new Dimension(700,55));
 
 		chatPanel.add(sp, BorderLayout.CENTER);
 		JPanel jp = new JPanel();
 		jp.add(spwrite);
 		jp.add(sendMessageButton);
 		chatPanel.add(jp, BorderLayout.SOUTH);
-		
+		chatPanel.add(back, BorderLayout.SOUTH);
+		back.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cl.show(outerPanel, "Main Menu");
+			}
+		});
 		class SendMessage implements ActionListener {
-			
-			public SendMessage(){
-				
+			JTextArea txt;
+			JTextArea write;
+			public SendMessage(JTextArea txt, JTextArea write){
+				this.txt = txt;
+				this.write = write;
 			}
 		    public void actionPerformed(ActionEvent e) {
 		        String text = write.getText();
-		        System.out.println("my username:" + myClientUser.getUsername());
-		        ChatMessage messageToSend = new ChatMessage(write.getText(), myClientUser.getUsername());
-		        sendMessageToServer(messageToSend);
-		        txt.append(myClientUser.getUsername() + ": " + text + "\n");
+		        txt.append(text + "\n");
 		        write.setText("");
 		    }
 		}
-		sendMessageButton.addActionListener(new SendMessage());
+		sendMessageButton.addActionListener(new SendMessage(txt, write));
 	}
 	
 	public void addTextToChat(ChatMessage chatmsg){
