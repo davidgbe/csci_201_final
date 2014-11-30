@@ -43,6 +43,17 @@ public class BattleData extends Message{
 		this.myStrength = myStrength;
 	}
 	
+	public BattleData(int id, String myName, String oName, int myHealth, int oHealth, double myStrength, double oStrength){
+		this.id = id;
+		this.type = "start";
+		this.myPokemon = myName;
+		this.opponentPokemon = oName;
+		this.myHealth = myHealth;
+		this.opponentHealth = oHealth;
+		this.myStrength = myStrength;
+		this.opponentStrength = oStrength;
+	}
+	
 	public double getMyStrength() {
 		return myStrength;
 	}
