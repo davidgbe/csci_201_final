@@ -18,16 +18,12 @@ public class BattleData extends Message{
 	
 	private String itemName;
 	
-	public BattleData(int id, String attack, boolean missed, boolean critical, int myHealth, int oHealth, double myStrength, double oStrength){
+	public BattleData(int id, String attack, String oName, int oHealth){
 		this.id = id;
 		this.type = "attack";
 		this.attackName = attack;
-		this.missed = missed;
-		this.critical = critical;
-		this.myHealth = myHealth;
+		this.opponentPokemon = oName;
 		this.opponentHealth = oHealth;
-		this.myStrength = myStrength;
-		this.opponentStrength = oStrength;
 	}
 
 	public BattleData(int id, String itemName, String myName, int newHealth, double newStrength) {
