@@ -421,22 +421,25 @@ public class ServerUser extends User implements Runnable {
 				}
 			}
 			
-		} catch(EOFException eofe) {
+		} catch(IOException eofe) {
 			if(this.isInBattle()) {
-				System.out.println("Thrown");
+				this.opponent.sendMessageToClient(new GameOver(this.getID()));
+				System.out.println("send game over from disconnect");
+				//exit battle
 			}
-			System.out.println("Thrown2");
-			//disconnect stuff
-		} catch (Exception ioe) {
-			System.out.println("IOException in ServerUser run method: " + ioe.getMessage());
-
+			System.out.println("happensss");
 			allUsers.remove(this);
 			System.out.println(this.getUsername() + " quit");
+
+		} catch (Exception ioe) {
+			System.out.println("General exception in ServerUser run method: " + ioe.getMessage());
+
+			
 			
 			// don't print stack trace for a user simply quiting the program
-			if(!(ioe instanceof SocketException)){
-				ioe.printStackTrace();
-			}
+//			if(!(ioe instanceof SocketException)){
+//				ioe.printStackTrace();
+//			}
 		} 
 	}
 
