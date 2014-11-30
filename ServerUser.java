@@ -244,6 +244,7 @@ public class ServerUser extends User implements Runnable {
 		} else if(msg instanceof QueueMe) {
 			this.server.addToQueue(this);
 		} else if(msg instanceof PokemonUpdate) {
+			this.getPokemons().clear();
 			String[] names = ((PokemonUpdate)msg).getPokemon();
 			for(String name : names) {
 				if(name != null) {
