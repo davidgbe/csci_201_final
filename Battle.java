@@ -182,11 +182,10 @@ public class Battle extends JPanel {
 			tempButton.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					user.getItems().put("epinephrine", user.getItemQuantity("epinephrine") - 1);
-					System.out.println("Used 1 epinephrine. " + user.getItemQuantity("epinephrine") + " left.");
-					
+					//user.getItems().put("epinephrine", user.getItemQuantity("epinephrine") - 1);
+					//System.out.println("Used 1 epinephrine. " + user.getItemQuantity("epinephrine") + " left.");
 					String pokemonToRevive = tempButton.getText();
-					// send use of epi to server
+					user.sendMessageToServer(new Item("epinephrine", pokemonToRevive));
 				}
 			});
 			
@@ -299,8 +298,6 @@ public class Battle extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(user.getItems().get("epinephrine") > 0){
 					// SEND MESSAGE TO SERVER
-					
-					
 					cl2.show(rightPanel, "Epinephrine");
 					cl.show(leftPanel, "Status");
 				}
