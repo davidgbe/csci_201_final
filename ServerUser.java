@@ -423,8 +423,9 @@ public class ServerUser extends User implements Runnable {
 			
 		} catch(EOFException eofe) {
 			if(this.isInBattle()) {
-				//exit battle
+				System.out.println("Thrown");
 			}
+			System.out.println("Thrown2");
 			//disconnect stuff
 		} catch (Exception ioe) {
 			System.out.println("IOException in ServerUser run method: " + ioe.getMessage());
