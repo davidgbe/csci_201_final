@@ -115,6 +115,7 @@ public class ClientUser extends User implements Runnable{
 			pk.currentBattle.updateBattleUI();
 			pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName());
 			if(myP.getHealthPoints() == 0) {
+				this.getCurrentPokemon().setDead(true);
 				pk.currentBattle.forceSwitchPokemon();
 			}
 		} else if(bd.getType().equals("item")) {
@@ -161,6 +162,7 @@ public class ClientUser extends User implements Runnable{
 			else if(bd.getItemName().equals("epinephrine")) {
 				Pokemon targetP = this.getPokemon(bd.getMyPokemon());
 				targetP.setHealthPoints(bd.getMyHealth());
+				targetP.setDead(false);
 				pk.currentBattle.setStatus(bd.getMyPokemon() + " used epinephrine! It was revived!");
 			}
 		} else if(bd.getType().equals("switch")) {
