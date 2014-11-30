@@ -246,17 +246,9 @@ public class ServerUser extends User implements Runnable {
 			if(names[0] != null) {
 				this.setCurrentPokemon(this.getPokemon(names[0]));
 			}
-		} else if(msg instanceof Attack) {
-			processAttack((Attack)msg);
-		}else if(msg instanceof BattleData){
+		} else if(msg instanceof BattleData){
 			forwardBattleData((BattleData)msg);
 		}
-	}
-	
-	private void processAttack(Attack attack) {
-		Pokemon ocp = this.opponent.getCurrentPokemon();
-		//ocp.setHealthPoints(ocp.getHealthPoints() - attack.getDamage());
-		alertBothClientsOfAttack(attack.getName());
 	}
 	
 	private void forwardBattleData(BattleData bd){
@@ -266,26 +258,6 @@ public class ServerUser extends User implements Runnable {
 				server.getUserByID(bd.getId()).sendMessageToClient(bd);
 			}
 		}
-		
-	}
-	
-	private void processItemUse(BattleData bd){
-		
-	}
-	
-	private void alertBothClientsOfAttack(String attackName) {
-		Pokemon myP = this.getCurrentPokemon();
-		Pokemon oP = this.opponent.getCurrentPokemon();
-		BattleData bd = new BattleData(this.getID(), attackName, false, false, myP.getHealthPoints(), oP.getHealthPoints(), myP.getStrength(), oP.getStrength());
-		this.sendMessageToClient(bd);
-		this.opponent.sendMessageToClient(bd);
-	}
-	
-	private void alertBothClientsOfItem() {
-		
-	}
-	
-	private void alertBothClientsOfSwitch() {
 		
 	}
 

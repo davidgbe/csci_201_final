@@ -236,6 +236,7 @@ public class PokemonFrame extends JFrame {
 		class SendMessage implements ActionListener {
 			
 			public SendMessage(){
+				
 			}
 		    public void actionPerformed(ActionEvent e) {
 		        String text = write.getText();

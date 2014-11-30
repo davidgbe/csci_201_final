@@ -308,8 +308,6 @@ public class Battle extends JPanel {
 	}
 	
 	public void updateBattleUI(){
-	
-		
 		myPokemonImage = user.getCurrentPokemon().getPokemonImage(); 
 		imageLabel1.setIcon(myPokemonImage); 
 		

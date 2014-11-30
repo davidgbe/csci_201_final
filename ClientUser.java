@@ -112,8 +112,6 @@ public class ClientUser extends User implements Runnable{
 					this.opponentStrength = bd.getMyStrength();
 				}
 				pk.currentBattle.updateBattleUI();
-// add proper code to update the battle
-//				this.pk.showBattle();
 			}
 			else if(bd.getType().equals("item")){
 				if(bd.getItemName().equals("morphine")){
