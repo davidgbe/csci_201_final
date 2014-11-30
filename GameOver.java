@@ -1,5 +1,5 @@
 
-public class GameOver {
+public class GameOver extends Message {
 	public int winnerId;
 	
 	public GameOver(int id) {

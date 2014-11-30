@@ -282,6 +282,9 @@ public class ServerUser extends User implements Runnable {
 		} else  if(item.getType().equals("epinephrine")) {
 			Pokemon targetP = this.getPokemon(item.getPokemon());
 			targetP.setHealthPoints(targetP.getTotalHealthPoints());
+			if(targetP.isDead()) {
+				targetP.setDead(true);
+			}
 			this.updateItem("epinephrine", -1);
 			BattleData eData = new BattleData(this.getID(), "epinephrine", targetP.getName(), targetP.getHealthPoints(), targetP.getStrength());
 			updateClients(eData);
