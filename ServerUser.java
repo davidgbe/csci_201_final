@@ -49,6 +49,12 @@ public class ServerUser extends User implements Runnable {
 	}
 	
 	public boolean login(String username, String pass, Connection con) {
+		for(User user : allUsers) {
+			System.out.println("Here:" + user.getUsername());
+			if(user.getUsername().equals(username)) {
+				return false;
+			}
+		}
 		if(con == null) {
 			con = establishConnection();
 		}
