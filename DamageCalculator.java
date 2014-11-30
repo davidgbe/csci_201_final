@@ -73,7 +73,7 @@ class AttackInformation{
 	public double totalDamage(Pokemon pok){
 		if (Math.random()<this.accuracy){
 			if (Math.random()<this.crit){
-				return 1.5*this.damage*pok.getStrength();
+				return 1.0*this.damage*pok.getStrength();
 			}
 			else{
 				return this.damage*pok.getStrength();
