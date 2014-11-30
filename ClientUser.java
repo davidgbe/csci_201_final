@@ -243,8 +243,10 @@ public class ClientUser extends User implements Runnable{
 					} else if(objectReceived instanceof GameOver) {
 						if( ((GameOver)objectReceived).getWinnerID() == this.getID()) {
 							//I LOST!
+							pk.showWinLossScreen(true);
 						} else {
 							//I WON!
+							pk.showWinLossScreen(false);
 						}
 					}
 					

@@ -483,6 +483,24 @@ public class PokemonFrame extends JFrame {
         startPanel.add(imageLabel, BorderLayout.NORTH);
         startPanel.add(buttons, BorderLayout.CENTER);
 	}
+	
+	public void showWinLossScreen(boolean iWon){
+		if(iWon){
+			JOptionPane.showMessageDialog(pk,
+				    "You won!",
+				    "Congratulations",
+				    JOptionPane.INFORMATION_MESSAGE);
+		}
+		else{
+			JOptionPane.showMessageDialog(pk,
+				    "You lost!",
+				    "",
+				    JOptionPane.INFORMATION_MESSAGE);
+		}
+		
+		// empty pokemon/current pokemon
+		// reset pokemon select screen (reset background color)
+	}
         
         
      
