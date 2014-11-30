@@ -203,10 +203,10 @@ public class Battle extends JPanel {
 //					setStatus("You used morphine. Health increased by 200 points.");
 ////					BattleData bdToSend = new BattleData(user.getOpponentID(), "morphine", user.getCurrentPokemon().getName(), user.getCurrentPokemon().getHealthPoints());
 ////					user.sendMessageToServer(bdToSend);
-//					user.getItems().put("morphine", user.getItemQuantity("morphine") - 1);
 //					System.out.println("Used 1 morphine. " + user.getItemQuantity("morphine") + " left.");
 //					updateBattleUI();
-//					cl2.show(rightPanel, "Selection");
+					cl2.show(rightPanel, "Selection");
+					cl.show(leftPanel, "Status");
 					toggle();
 				}
 				else{
@@ -227,9 +227,10 @@ public class Battle extends JPanel {
 					// SEND MESSAGE TO SERVER
 					System.out.println("CALLED!");
 					user.sendMessageToServer(new Item("steroids"));
-//					user.getItems().put("steroids", user.getItemQuantity("steroids") - 1);
+					user.getItems().put("steroids", user.getItemQuantity("steroids") - 1);
 //					System.out.println("Used 1 steroid. " + user.getItemQuantity("steroids") + " left.");
-//					cl2.show(rightPanel, "Selection");
+					cl2.show(rightPanel, "Selection");
+					cl.show(leftPanel, "Status");
 					toggle();
 				}
 				else{
@@ -245,9 +246,11 @@ public class Battle extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(user.getItems().get("epinephrine") > 0){
 					// SEND MESSAGE TO SERVER
+					
 					user.getItems().put("epinephrine", user.getItemQuantity("epinephrine") - 1);
 					System.out.println("Used 1 epinephrine. " + user.getItemQuantity("epinephrine") + " left.");
 					cl2.show(rightPanel, "Selection");
+					cl.show(leftPanel, "Status");
 					toggle();
 				}
 				else{

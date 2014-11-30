@@ -113,12 +113,14 @@ public class ClientUser extends User implements Runnable{
 			myP.setHealthPoints(bd.getOpponentHealth());
 			myP.setStrength(bd.getOpponentStrength());
 		} else if(bd.getType().equals("item")) {
-			this.updateItem(bd.getItemName(), -1);
 			if(bd.getItemName().equals("morphine")){
 				this.opponentHealth = bd.getMyHealth();
-//				pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used morphine! Health increased by 200");
+				pk.currentBattle.setStatus(bd.getMyPokemon() + " used morphine! Health increased by 200");
+				pk.currentBattle.updateBattleUI();
 			} else if(bd.getItemName().equals("steroids")) {
 				this.opponentStrength = bd.getMyStrength();
+				System.out.println("opp new strength: " + bd.getMyStrength());
+				pk.currentBattle.setStatus(bd.getMyPokemon() + " used steroids! Attack increased by 50");
 			}
 		}
 		this.pk.currentBattle.toggle();
@@ -131,10 +133,14 @@ public class ClientUser extends User implements Runnable{
 			this.opponentStrength = bd.getOpponentStrength();
 		} else if(bd.getType().equals("item")) {
 			if(bd.getItemName().equals("morphine")){
+				this.updateItem(bd.getItemName(), -1);
 				myP.setHealthPoints(bd.getMyHealth());
-//				pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used morphine! Health increased by 200");
+				pk.currentBattle.setStatus(bd.getMyPokemon() + " used morphine! Health increased by 200");
+				pk.currentBattle.updateBattleUI();
 			} else if(bd.getItemName().equals("steroids")) {
 				myP.setStrength(bd.getMyStrength());
+				System.out.println("my new strength: " + bd.getMyStrength());
+				pk.currentBattle.setStatus(bd.getMyPokemon() + " used steroids! Attack increased by 50");
 			}
 		}
 	}
