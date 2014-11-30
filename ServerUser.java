@@ -201,6 +201,8 @@ public class ServerUser extends User implements Runnable {
 				startData.setId(opponent.getID());
 			} 
 			out.writeObject(startData);
+			this.setInBattle(true);
+			opponent.setInBattle(true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -424,10 +426,10 @@ public class ServerUser extends User implements Runnable {
 		} catch(IOException eofe) {
 			if(this.isInBattle()) {
 				this.opponent.sendMessageToClient(new GameOver(this.getID()));
+				this.opponent.setInBattle(false);
 				System.out.println("send game over from disconnect");
 				//exit battle
 			}
-			System.out.println("happensss");
 			allUsers.remove(this);
 			System.out.println(this.getUsername() + " quit");
 
