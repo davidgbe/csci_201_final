@@ -249,6 +249,10 @@ public class ServerUser extends User implements Runnable {
 			}
 		} else if(msg instanceof Item) {
 			processItem((Item)msg);
+		} else if(msg instanceof Attack) {
+			processAttack((Attack)msg);
+		} else if(msg instanceof Switch) {
+			processSwitch((Switch)msg);
 		}
 	}
 
@@ -286,8 +290,11 @@ public class ServerUser extends User implements Runnable {
 		this.updateClients(attackData);
 	}
 	
-	public void processChangePokemon(ChangePokemon changePokemon) {
-		
+	public void processSwitch(Switch switchObj) {
+		this.setCurrentPokemon(this.getPokemon(switchObj.getNewPokemon()));
+		Pokemon myP = this.getCurrentPokemon();
+		BattleData switchData = new BattleData(this.getID(), myP.getName(), myP.getHealthPoints(), myP.getStrength());
+		this.updateClients(switchData);
 	}
 	
 //one method to forward BattleData to clients

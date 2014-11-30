@@ -144,9 +144,7 @@ public class ClientUser extends User implements Runnable{
 			}
 		}
 	}
-	
-	
-	
+
 	public void sendMessageToServer(Object obj) {
 		try {
 			this.out.writeObject(obj);

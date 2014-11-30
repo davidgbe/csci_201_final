@@ -35,15 +35,12 @@ public class BattleData extends Message{
 		this.myStrength = newStrength;
 	}
 	
-	public BattleData(int id, String myName, String oName, int myHealth, int oHealth, double myStrength, double oStrength){
+	public BattleData(int id, String myName, int myHealth, double myStrength){
 		this.id = id;
 		this.type = "switch";
 		this.myPokemon = myName;
-		this.opponentPokemon = oName;
 		this.myHealth = myHealth;
-		this.opponentHealth = oHealth;
 		this.myStrength = myStrength;
-		this.opponentStrength = oStrength;
 	}
 	
 	public double getMyStrength() {
