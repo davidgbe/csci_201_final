@@ -500,6 +500,11 @@ public class PokemonFrame extends JFrame {
 		
 		// empty pokemon/current pokemon
 		// reset pokemon select screen (reset background color)
+		cl.show(outerPanel, "Main Menu");
+		myClientUser.getPokemons().clear();
+		myClientUser.setCurrentPokemon(null);
+		currentBattle = null;
+		
 	}
         
         
