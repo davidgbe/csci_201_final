@@ -112,6 +112,8 @@ public class ClientUser extends User implements Runnable{
 		if(bd.getType().equals("attack")) {
 			myP.setHealthPoints(bd.getOpponentHealth());
 			myP.setStrength(bd.getOpponentStrength());
+			pk.currentBattle.updateBattleUI();
+			pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName());
 		} else if(bd.getType().equals("item")) {
 			if(bd.getItemName().equals("morphine")){
 				this.opponentHealth = bd.getMyHealth();
@@ -122,6 +124,9 @@ public class ClientUser extends User implements Runnable{
 				System.out.println("opp new strength: " + bd.getMyStrength());
 				pk.currentBattle.setStatus(bd.getMyPokemon() + " used steroids! Attack increased by 50");
 			}
+			else if(bd.getItemName().equals("epinephrine")) {
+				// do stuff
+			}
 		}
 		this.pk.currentBattle.toggle();
 	}
@@ -131,6 +136,8 @@ public class ClientUser extends User implements Runnable{
 		if(bd.getType().equals("attack")) {
 			this.opponentHealth = bd.getOpponentHealth();
 			this.opponentStrength = bd.getOpponentStrength();
+			pk.currentBattle.updateBattleUI();
+			pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName());
 		} else if(bd.getType().equals("item")) {
 			if(bd.getItemName().equals("morphine")){
 				this.updateItem(bd.getItemName(), -1);
@@ -142,6 +149,10 @@ public class ClientUser extends User implements Runnable{
 				System.out.println("my new strength: " + bd.getMyStrength());
 				pk.currentBattle.setStatus(bd.getMyPokemon() + " used steroids! Attack increased by 50");
 			}
+			else if(bd.getItemName().equals("epinephrine")) {
+				// do stuff
+			}
+			
 		}
 	}
 	

@@ -306,10 +306,10 @@ public class Battle extends JPanel {
 		}
 		public void actionPerformed(ActionEvent e) {
 			JButton button = (JButton) e.getSource();
-			battleStatus.setText(user.getCurrentPokemon().getName() + " used " + button.getText());
+			this.user.sendMessageToServer(new Attack(button.getText()));
 			cl.show(leftPanel, "Status");
 			cl2.show(rightPanel, "Selection");
-			//this.user.sendMessageToServer(new Attack(button.getText(), 10));
+
 			// opponent needs to receive user's attack
 			// user needs to wait for opponent to send an attack.
 			// user needs to receive attack
