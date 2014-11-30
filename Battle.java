@@ -285,7 +285,6 @@ public class Battle extends JPanel {
 //					System.out.println("Used 1 steroid. " + user.getItemQuantity("steroids") + " left.");
 					cl2.show(rightPanel, "Selection");
 					cl.show(leftPanel, "Status");
-					toggle();
 				}
 				else{
 					JOptionPane.showMessageDialog(pk,
