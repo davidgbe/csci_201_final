@@ -98,31 +98,64 @@ public class ClientUser extends User implements Runnable{
 				this.pk.currentBattle.toggle();
 			}
 		} else {
-			if(bd.getType().equals("attack")) {
-				Pokemon myP = this.getCurrentPokemon();
-				if(bd.getId() == this.getID()) {
-					myP.setHealthPoints(bd.getMyHealth());
-					myP.setStrength(bd.getMyStrength());
-					this.opponentHealth = bd.getOpponentHealth();
-					this.opponentStrength = bd.getOpponentStrength();
-				} else {
-					myP.setHealthPoints(bd.getOpponentHealth());
-					myP.setStrength(bd.getOpponentStrength());
-					this.opponentHealth = bd.getMyHealth();
-					this.opponentStrength = bd.getMyStrength();
-				}
-				pk.currentBattle.updateBattleUI();
+			if(bd.getId() == this.getID()) {
+				processOwnMove(bd);
+			} else {
+				processOpponentMove(bd);
 			}
-			else if(bd.getType().equals("item")){
-				if(bd.getItemName().equals("morphine")){
-					this.opponentHealth = bd.getOpponentHealth();
-					pk.currentBattle.updateBattleUI();
-					pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used morphine! Health increased by 200");
-				}
-			}
+			pk.currentBattle.updateBattleUI();
 		}
 	}
 	
+	private void processOpponentMove(BattleData bd) {
+		Pokemon myP = this.getCurrentPokemon();
+		if(bd.getType().equals("attack")) {
+			myP.setHealthPoints(bd.getOpponentHealth());
+			myP.setStrength(bd.getOpponentStrength());
+			pk.currentBattle.updateBattleUI();
+			pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName());
+		} else if(bd.getType().equals("item")) {
+			if(bd.getItemName().equals("morphine")){
+				this.opponentHealth = bd.getMyHealth();
+				pk.currentBattle.setStatus(bd.getMyPokemon() + " used morphine! Health increased by 200");
+				pk.currentBattle.updateBattleUI();
+			} else if(bd.getItemName().equals("steroids")) {
+				this.opponentStrength = bd.getMyStrength();
+				System.out.println("opp new strength: " + bd.getMyStrength());
+				pk.currentBattle.setStatus(bd.getMyPokemon() + " used steroids! Attack increased by 50");
+			}
+			else if(bd.getItemName().equals("epinephrine")) {
+				// do stuff
+			}
+		}
+		this.pk.currentBattle.toggle();
+	}
+	
+	private void processOwnMove(BattleData bd) {
+		Pokemon myP = this.getCurrentPokemon();
+		if(bd.getType().equals("attack")) {
+			this.opponentHealth = bd.getOpponentHealth();
+			this.opponentStrength = bd.getOpponentStrength();
+			pk.currentBattle.updateBattleUI();
+			pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName());
+		} else if(bd.getType().equals("item")) {
+			if(bd.getItemName().equals("morphine")){
+				this.updateItem(bd.getItemName(), -1);
+				myP.setHealthPoints(bd.getMyHealth());
+				pk.currentBattle.setStatus(bd.getMyPokemon() + " used morphine! Health increased by 200");
+				pk.currentBattle.updateBattleUI();
+			} else if(bd.getItemName().equals("steroids")) {
+				myP.setStrength(bd.getMyStrength());
+				System.out.println("my new strength: " + bd.getMyStrength());
+				pk.currentBattle.setStatus(bd.getMyPokemon() + " used steroids! Attack increased by 50");
+			}
+			else if(bd.getItemName().equals("epinephrine")) {
+				// do stuff
+			}
+			
+		}
+	}
+
 	public void sendMessageToServer(Object obj) {
 		try {
 			this.out.writeObject(obj);

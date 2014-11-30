@@ -198,14 +198,16 @@ public class Battle extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(user.getItems().get("morphine") > 0){
 					// SEND MESSAGE TO SERVER
-					user.getCurrentPokemon().setHealthPoints(user.getCurrentPokemon().getHealthPoints() + 200);
-					setStatus("You used morphine. Health increased by 200 points.");
-					BattleData bdToSend = new BattleData(user.getOpponentID(), "morphine", user.getCurrentPokemon().getName(), user.getCurrentPokemon().getHealthPoints());
-					user.sendMessageToServer(bdToSend);
-					user.getItems().put("morphine", user.getItemQuantity("morphine") - 1);
-					System.out.println("Used 1 morphine. " + user.getItemQuantity("morphine") + " left.");
-					updateBattleUI();
+					user.sendMessageToServer(new Item("morphine"));
+//					user.getCurrentPokemon().setHealthPoints(user.getCurrentPokemon().getHealthPoints() + 200);
+//					setStatus("You used morphine. Health increased by 200 points.");
+////					BattleData bdToSend = new BattleData(user.getOpponentID(), "morphine", user.getCurrentPokemon().getName(), user.getCurrentPokemon().getHealthPoints());
+////					user.sendMessageToServer(bdToSend);
+//					System.out.println("Used 1 morphine. " + user.getItemQuantity("morphine") + " left.");
+//					updateBattleUI();
 					cl2.show(rightPanel, "Selection");
+					cl.show(leftPanel, "Status");
+					toggle();
 				}
 				else{
 					JOptionPane.showMessageDialog(pk,
@@ -223,9 +225,13 @@ public class Battle extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(user.getItems().get("steroids") > 0){
 					// SEND MESSAGE TO SERVER
+					System.out.println("CALLED!");
+					user.sendMessageToServer(new Item("steroids"));
 					user.getItems().put("steroids", user.getItemQuantity("steroids") - 1);
-					System.out.println("Used 1 steroid. " + user.getItemQuantity("steroids") + " left.");
+//					System.out.println("Used 1 steroid. " + user.getItemQuantity("steroids") + " left.");
 					cl2.show(rightPanel, "Selection");
+					cl.show(leftPanel, "Status");
+					toggle();
 				}
 				else{
 					JOptionPane.showMessageDialog(pk,
@@ -240,9 +246,12 @@ public class Battle extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(user.getItems().get("epinephrine") > 0){
 					// SEND MESSAGE TO SERVER
+					
 					user.getItems().put("epinephrine", user.getItemQuantity("epinephrine") - 1);
 					System.out.println("Used 1 epinephrine. " + user.getItemQuantity("epinephrine") + " left.");
 					cl2.show(rightPanel, "Selection");
+					cl.show(leftPanel, "Status");
+					toggle();
 				}
 				else{
 					JOptionPane.showMessageDialog(pk,
@@ -297,10 +306,10 @@ public class Battle extends JPanel {
 		}
 		public void actionPerformed(ActionEvent e) {
 			JButton button = (JButton) e.getSource();
-			battleStatus.setText(user.getCurrentPokemon().getName() + " used " + button.getText());
+			this.user.sendMessageToServer(new Attack(button.getText()));
 			cl.show(leftPanel, "Status");
 			cl2.show(rightPanel, "Selection");
-			//this.user.sendMessageToServer(new Attack(button.getText(), 10));
+
 			// opponent needs to receive user's attack
 			// user needs to wait for opponent to send an attack.
 			// user needs to receive attack

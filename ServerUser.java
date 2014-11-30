@@ -34,6 +34,7 @@ public class ServerUser extends User implements Runnable {
 	public static final int EPINEPHRINE_PRICE = 50;
 	
 	private static ReentrantLock lock = new ReentrantLock();
+	private static DamageCalculator dc = new DamageCalculator();
 	
 	public ServerUser(Socket s, Vector<ServerUser> allUsers, Server server) {
 		super(-1, "", 0, 0, 0, new HashMap<String, Integer>());
@@ -246,19 +247,61 @@ public class ServerUser extends User implements Runnable {
 			if(names[0] != null) {
 				this.setCurrentPokemon(this.getPokemon(names[0]));
 			}
-		} else if(msg instanceof BattleData){
-			forwardBattleData((BattleData)msg);
+		} else if(msg instanceof Item) {
+			processItem((Item)msg);
+		} else if(msg instanceof Attack) {
+			processAttack((Attack)msg);
+		} else if(msg instanceof Switch) {
+			processSwitch((Switch)msg);
+		}
+	}
+
+//Three methods for recognition of moves coming from client
+	
+	public void processItem(Item item) {
+		Pokemon myP = this.getCurrentPokemon();
+		Pokemon oP = this.opponent.getCurrentPokemon();
+		
+		if(item.getType().equals("steroids")) {
+			//appropriate math for steroids
+			myP.setStrength(myP.getStrength() + 50);
+			this.updateItem("steroids", -1);
+			BattleData steroidData = new BattleData(this.getID(), "steroids", myP.getName(), myP.getHealthPoints(), myP.getStrength());
+			updateClients(steroidData);
+		} else if(item.getType().equals("morphine")) {
+			myP.setHealthPoints(myP.getHealthPoints() + 200);
+			this.updateItem("morphine", -1);
+			BattleData morphineData = new BattleData(this.getID(), "morphine", myP.getName(), myP.getHealthPoints(), myP.getStrength());
+			updateClients(morphineData);
+		} else  if(item.getType().equals("epinephrine")) {
+			
 		}
 	}
 	
-	private void forwardBattleData(BattleData bd){
-		if(bd.getType().equals("item")){
-			if(bd.getItemName().equals("morphine")){
-				//forwards bd to the user it's directed at
-				server.getUserByID(bd.getId()).sendMessageToClient(bd);
-			}
-		}
+	public void processAttack(Attack attack) {
+		Pokemon myP = this.getCurrentPokemon();
+		Pokemon oP = this.opponent.getCurrentPokemon();
 		
+		oP.setHealthPoints( (int)(oP.getHealthPoints() - dc.getTotalDamage(attack.getName(), myP)) );
+		if(oP.getHealthPoints() < 0) {
+			oP.setHealthPoints(0);
+		}
+		BattleData attackData = new BattleData(this.getID(), attack.getName(), oP.getName(), oP.getHealthPoints());
+		this.updateClients(attackData);
+	}
+	
+	public void processSwitch(Switch switchObj) {
+		this.setCurrentPokemon(this.getPokemon(switchObj.getNewPokemon()));
+		Pokemon myP = this.getCurrentPokemon();
+		BattleData switchData = new BattleData(this.getID(), myP.getName(), myP.getHealthPoints(), myP.getStrength());
+		this.updateClients(switchData);
+	}
+	
+//one method to forward BattleData to clients
+	
+	public void updateClients(BattleData bd) {
+		this.sendMessageToClient(bd);
+		this.opponent.sendMessageToClient(bd);
 	}
 
 	private void processPurchase(PurchaseUpdate pu) {

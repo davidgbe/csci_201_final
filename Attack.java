@@ -1,8 +1,7 @@
 public class Attack extends Message {
 	private int pokID;
 	private String name;
-	public Attack(int pokID, String name){
-		this.pokID = pokID;
+	public Attack(String name){
 		this.name = name;
 	}
 	public int getPokemonID(){

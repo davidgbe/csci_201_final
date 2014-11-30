@@ -18,30 +18,34 @@ public class BattleData extends Message{
 	
 	private String itemName;
 	
-	public BattleData(int id, String attack, boolean missed, boolean critical, int myHealth, int oHealth, double myStrength, double oStrength){
+	public BattleData(int id, String attack, String oName, int oHealth){
 		this.id = id;
 		this.type = "attack";
 		this.attackName = attack;
-		this.missed = missed;
-		this.critical = critical;
-		this.myHealth = myHealth;
+		this.opponentPokemon = oName;
 		this.opponentHealth = oHealth;
-		this.myStrength = myStrength;
-		this.opponentStrength = oStrength;
 	}
 
-	public BattleData(int idToSendTo, String itemName, String myName, int newHealth) {
-		this.id = idToSendTo;
+	public BattleData(int id, String itemName, String myName, int newHealth, double newStrength) {
+		this.id = id;
 		this.type = "item";
 		this.itemName = itemName;
-		this.opponentPokemon = myName;
-		this.opponentHealth = newHealth;
-
+		this.myPokemon = myName;
+		this.myHealth = newHealth;
+		this.myStrength = newStrength;
+	}
+	
+	public BattleData(int id, String myName, int myHealth, double myStrength){
+		this.id = id;
+		this.type = "switch";
+		this.myPokemon = myName;
+		this.myHealth = myHealth;
+		this.myStrength = myStrength;
 	}
 	
 	public BattleData(int id, String myName, String oName, int myHealth, int oHealth, double myStrength, double oStrength){
 		this.id = id;
-		this.type = "switch";
+		this.type = "start";
 		this.myPokemon = myName;
 		this.opponentPokemon = oName;
 		this.myHealth = myHealth;
