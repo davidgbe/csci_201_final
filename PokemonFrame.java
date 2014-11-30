@@ -195,7 +195,6 @@ public class PokemonFrame extends JFrame {
 						String tempName = button.getText().toLowerCase();
 						myClientUser.removePokemon(tempName);
 					}
-
 				}
 			});
 			inner.add(button);
