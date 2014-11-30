@@ -172,7 +172,7 @@ public class ServerUser extends User implements Runnable {
 			this.getItems().put("morphine", results.getInt("morphine"));
 			this.getItems().put("epinephrine", results.getInt("epinephrine"));
 			System.out.println("steroids: " + results.getInt("steroids"));
-			System.out.println("epinephrine: " + results.getInt("epinephrine"));
+			System.out.println("morphine " + results.getInt("morphine"));
 			System.out.println("epinephrine: " + results.getInt("epinephrine"));
 			
 		} catch(Exception e) {
@@ -300,7 +300,7 @@ public class ServerUser extends User implements Runnable {
 				endGame();
 			}
 		}
-		BattleData attackData = new BattleData(this.getID(), attack.getName(), oP.getName(), oP.getHealthPoints());
+		BattleData attackData = new BattleData(this.getID(), attack.getName(), myP.getName(), oP.getHealthPoints());
 		this.updateClients(attackData);
 	}
 	

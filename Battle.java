@@ -67,6 +67,8 @@ public class Battle extends JPanel {
 	
 	JPanel bagPanel = new JPanel();
 	JPanel selectionPanel = new JPanel();
+	JPanel changePokemonPanel = new JPanel();
+	JPanel epinephrineUsePanel = new JPanel();
 	
 	ClientUser user;
 	PokemonFrame pk;
@@ -91,6 +93,8 @@ public class Battle extends JPanel {
 		leftPanel.setPreferredSize(new Dimension(390, 200)); 
 		rightPanel.setPreferredSize(new Dimension(390, 200));
 		bagPanel.setPreferredSize(new Dimension(390, 200));
+		changePokemonPanel.setPreferredSize(new Dimension(390, 200));
+		epinephrineUsePanel.setPreferredSize(new Dimension(390, 200));
 		
 		add(battlePanel, BorderLayout.WEST);
 		add(opponentPanel, BorderLayout.EAST);
@@ -150,6 +154,9 @@ public class Battle extends JPanel {
 		attack4.addActionListener(al);
 		
 		bagPanel.setLayout(new BoxLayout(bagPanel, BoxLayout.Y_AXIS));
+		changePokemonPanel.setLayout(new BoxLayout(changePokemonPanel, BoxLayout.Y_AXIS));
+		epinephrineUsePanel.setLayout(new BoxLayout(epinephrineUsePanel, BoxLayout.Y_AXIS));
+		
 		useSteroidsButton = new JButton("Steroids x" + user.getItems().get("steroids"));
 		useMorphineButton = new JButton("Morphine x" + user.getItems().get("morphine"));
 		useEpinephrineButton = new JButton("Epinephrine x" + user.getItems().get("epinephrine"));
@@ -176,6 +183,7 @@ public class Battle extends JPanel {
 		choosePokemon.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 	
 			}
 		});
@@ -277,6 +285,8 @@ public class Battle extends JPanel {
 		
 		rightPanel.add(bagPanel, "Bag");
 		rightPanel.add(selectionPanel, "Selection");
+		rightPanel.add(changePokemonPanel, "ChangePokemon");
+		rightPanel.add(epinephrineUsePanel, "Epinephrine");
 		
 		cl.show(leftPanel, "Status");
 		cl2.show(rightPanel, "Selection");
