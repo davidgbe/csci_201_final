@@ -34,7 +34,7 @@ public class ServerUser extends User implements Runnable {
 	public static final int EPINEPHRINE_PRICE = 50;
 	
 	private static ReentrantLock lock = new ReentrantLock();
-	private static String[] itemTypes = {"morphine", "steroids", "epinephrine"};
+	private static DamageCalculator dc = new DamageCalculator();
 	
 	public ServerUser(Socket s, Vector<ServerUser> allUsers, Server server) {
 		super(-1, "", 0, 0, 0, new HashMap<String, Integer>());
@@ -253,6 +253,7 @@ public class ServerUser extends User implements Runnable {
 	}
 
 //Three methods for recognition of moves coming from client
+	
 	public void processItem(Item item) {
 		Pokemon myP = this.getCurrentPokemon();
 		Pokemon oP = this.opponent.getCurrentPokemon();
@@ -274,7 +275,15 @@ public class ServerUser extends User implements Runnable {
 	}
 	
 	public void processAttack(Attack attack) {
+		Pokemon myP = this.getCurrentPokemon();
+		Pokemon oP = this.opponent.getCurrentPokemon();
 		
+		oP.setHealthPoints( (int)(oP.getHealthPoints() - dc.getTotalDamage(attack.getName(), myP)) );
+		if(oP.getHealthPoints() < 0) {
+			oP.setHealthPoints(0);
+		}
+		BattleData attackData = new BattleData(this.getID(), attack.getName(), oP.getName(), oP.getHealthPoints());
+		this.updateClients(attackData);
 	}
 	
 	public void processChangePokemon(ChangePokemon changePokemon) {
@@ -287,17 +296,6 @@ public class ServerUser extends User implements Runnable {
 		this.sendMessageToClient(bd);
 		this.opponent.sendMessageToClient(bd);
 	}
-
-//Three methods for doing logic serverside
-	
-//	private void forwardBattleData(BattleData bd){
-//		if(bd.getType().equals("item")){
-//			if(bd.getItemName().equals("morphine")){
-//				//forwards bd to the user it's directed at
-//				server.getUserByID(bd.getId()).sendMessageToClient(bd);
-//			}
-//		}
-//	}
 
 	private void processPurchase(PurchaseUpdate pu) {
 		int total = 0;
