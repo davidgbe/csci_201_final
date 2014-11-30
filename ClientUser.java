@@ -160,6 +160,7 @@ public class ClientUser extends User implements Runnable{
 				pk.currentBattle.setStatus(bd.getMyPokemon() + " used epinephrine! It was revived!");
 			}
 		}
+		this.pk.currentBattle.toggle();
 	}
 
 	public void sendMessageToServer(Object obj) {

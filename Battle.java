@@ -66,6 +66,8 @@ public class Battle extends JPanel {
 	JButton useMorphineButton;
 	JButton useEpinephrineButton;
 	
+	JButton backToSelectionButton3;
+	
 	JPanel bagPanel = new JPanel();
 	JPanel selectionPanel = new JPanel();
 	JPanel changePokemonPanel = new JPanel();
@@ -162,6 +164,8 @@ public class Battle extends JPanel {
 		useMorphineButton = new JButton("Morphine x" + user.getItems().get("morphine"));
 		useEpinephrineButton = new JButton("Epinephrine x" + user.getItems().get("epinephrine"));
 		JButton backToSelectionButton = new JButton("<- Back");
+		JButton backToSelectionButton2 = new JButton("<- Back");
+		backToSelectionButton3 = new JButton("<- Back");
 		bagPanel.add(useSteroidsButton);
 		bagPanel.add(useMorphineButton);
 		bagPanel.add(useEpinephrineButton);
@@ -169,7 +173,7 @@ public class Battle extends JPanel {
 		
 		// populate epinephrine use panel
 		for(int i = 0; i < user.getPokemons().size(); ++i){
-			ImageIcon imageForButton = user.getPokemons().get(i).getPokemonImage();
+			ImageIcon imageForButton = new ImageIcon("images/" + user.getPokemons().get(i).getName() + ".png");
 			Image image = imageForButton.getImage(); 
 			Image newimg = image.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH); 
 			ImageIcon actualImageForButton = new ImageIcon(newimg);
@@ -189,7 +193,9 @@ public class Battle extends JPanel {
 			epinephrineUsePanel.add(tempButton);
 		}
 		
-		epinephrineUsePanel.add(backToSelectionButton);
+		epinephrineUsePanel.add(backToSelectionButton2);
+		
+		updateChoosePokemonPanel();
 		
 		this.choosePokemon = new JButton("Choose Pokemon"); 
 		selectionPanel.add(choosePokemon); 
@@ -208,6 +214,8 @@ public class Battle extends JPanel {
 		choosePokemon.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				updateChoosePokemonPanel();
+				cl2.show(rightPanel, "ChangePokemon");
 				
 	
 			}
@@ -220,6 +228,18 @@ public class Battle extends JPanel {
 		});
 		
 		backToSelectionButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cl2.show(rightPanel, "Selection");
+			}
+		});
+		backToSelectionButton2.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cl2.show(rightPanel, "Selection");
+			}
+		});
+		backToSelectionButton3.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cl2.show(rightPanel, "Selection");
@@ -240,7 +260,7 @@ public class Battle extends JPanel {
 //					updateBattleUI();
 					cl2.show(rightPanel, "Selection");
 					cl.show(leftPanel, "Status");
-					toggle();
+
 				}
 				else{
 					JOptionPane.showMessageDialog(pk,
@@ -385,6 +405,41 @@ public class Battle extends JPanel {
 		useSteroidsButton.setText("Steroids x" + user.getItemQuantity("steroids"));
 		useMorphineButton.setText("Morphine x" + user.getItemQuantity("morphine"));
 		useEpinephrineButton.setText("Epinephrine x" + user.getItemQuantity("epinephrine"));
+	}
+	
+	public void updateChoosePokemonPanel(){
+		
+		changePokemonPanel.removeAll();
+		changePokemonPanel.repaint();
+		changePokemonPanel.revalidate();
+		// populate choose pokemon panel
+		for(int i = 0; i < user.getPokemons().size(); ++i){
+			if(user.getPokemons().get(i).isDead() || user.getPokemons().get(i).getName().equals(user.getCurrentPokemon().getName())){
+				continue;
+			}
+			ImageIcon imageForButton = new ImageIcon("images/" + user.getPokemons().get(i).getName() + ".png");
+			Image image = imageForButton.getImage(); 
+			Image newimg = image.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH); 
+			ImageIcon actualImageForButton = new ImageIcon(newimg);
+			JButton tempButton = new JButton(user.getPokemons().get(i).getName(), actualImageForButton);
+			// add action listener here
+			tempButton.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					
+					String pokemonToSwitchTo = tempButton.getText();
+					//TODO: send switch to server
+					
+				}
+			});
+			
+			changePokemonPanel.add(tempButton);
+		}
+		
+		changePokemonPanel.add(backToSelectionButton3);
+		changePokemonPanel.repaint();
+		changePokemonPanel.revalidate();
 	}
 	
 	public void setStatus(String text){
