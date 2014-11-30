@@ -325,7 +325,9 @@ public class ServerUser extends User implements Runnable {
 	
 	public void updateClients(BattleData bd) {
 		this.sendMessageToClient(bd);
-		this.opponent.sendMessageToClient(bd);
+		if(this.opponent != null) {
+			this.opponent.sendMessageToClient(bd);
+		}
 	}
 	
 //to notify winners 
