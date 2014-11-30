@@ -324,6 +324,25 @@ public class ServerUser extends User implements Runnable {
 		GameOver go = new GameOver(this.getOpponentID());
 		this.sendMessageToClient(go);
 		this.opponent.sendMessageToClient(go);
+		
+		this.setInBattle(false);
+		this.setLosses(this.getLosses() + 1);
+		this.update();
+		
+		
+		this.opponent.won();
+		this.opponent = null;
+	}
+	
+	public void won() {
+		this.setInBattle(false);
+		
+		this.setWins(this.getWins() + 1);
+		this.setMoney(this.getMoney() + 200);
+		this.update();
+		
+		this.opponent = null;
+		
 	}
 
 	private void processPurchase(PurchaseUpdate pu) {
