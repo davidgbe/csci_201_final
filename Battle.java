@@ -425,10 +425,9 @@ public class Battle extends JPanel {
 			tempButton.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
-					
 					String pokemonToSwitchTo = tempButton.getText();
 					//TODO: send switch to server
+					user.sendMessageToServer(new Switch(pokemonToSwitchTo));
 					cl2.show(rightPanel, "Selection");
 					cl.show(leftPanel, "Status");
 				}

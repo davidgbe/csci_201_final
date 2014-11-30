@@ -132,6 +132,10 @@ public class ClientUser extends User implements Runnable{
 					this.opponentHealth = bd.getMyHealth();
 				}
 			}
+		} else if(bd.getType().equals("switch")) {
+			this.opponentPokemon = bd.getMyPokemon();
+			this.opponentHealth = bd.getMyHealth();
+			this.opponentStrength = bd.getMyStrength();
 		}
 		this.pk.currentBattle.toggle();
 	}
@@ -159,6 +163,8 @@ public class ClientUser extends User implements Runnable{
 				targetP.setHealthPoints(bd.getMyHealth());
 				pk.currentBattle.setStatus(bd.getMyPokemon() + " used epinephrine! It was revived!");
 			}
+		} else if(bd.getType().equals("switch")) {
+			this.setCurrentPokemon(this.getPokemon(bd.getMyPokemon()));
 		}
 		this.pk.currentBattle.toggle();
 	}
