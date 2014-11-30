@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -166,6 +167,30 @@ public class Battle extends JPanel {
 		bagPanel.add(useEpinephrineButton);
 		bagPanel.add(backToSelectionButton);
 		
+		// populate epinephrine use panel
+		for(int i = 0; i < user.getPokemons().size(); ++i){
+			ImageIcon imageForButton = user.getPokemons().get(i).getPokemonImage();
+			Image image = imageForButton.getImage(); 
+			Image newimg = image.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH); 
+			ImageIcon actualImageForButton = new ImageIcon(newimg);
+			JButton tempButton = new JButton(user.getPokemons().get(i).getName(), actualImageForButton);
+			// add action listener here
+			tempButton.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					user.getItems().put("epinephrine", user.getItemQuantity("epinephrine") - 1);
+					System.out.println("Used 1 epinephrine. " + user.getItemQuantity("epinephrine") + " left.");
+					
+					String pokemonToRevive = tempButton.getText();
+					// send use of epi to server
+				}
+			});
+			
+			epinephrineUsePanel.add(tempButton);
+		}
+		
+		epinephrineUsePanel.add(backToSelectionButton);
+		
 		this.choosePokemon = new JButton("Choose Pokemon"); 
 		selectionPanel.add(choosePokemon); 
 		this.viewBag = new JButton("View Bag"); 
@@ -255,11 +280,9 @@ public class Battle extends JPanel {
 				if(user.getItems().get("epinephrine") > 0){
 					// SEND MESSAGE TO SERVER
 					
-					user.getItems().put("epinephrine", user.getItemQuantity("epinephrine") - 1);
-					System.out.println("Used 1 epinephrine. " + user.getItemQuantity("epinephrine") + " left.");
-					cl2.show(rightPanel, "Selection");
+					
+					cl2.show(rightPanel, "Epinephrine");
 					cl.show(leftPanel, "Status");
-					toggle();
 				}
 				else{
 					JOptionPane.showMessageDialog(pk,
