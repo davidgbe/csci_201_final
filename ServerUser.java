@@ -294,23 +294,24 @@ public class ServerUser extends User implements Runnable {
 	public void processAttack(Attack attack) {
 		Pokemon myP = this.getCurrentPokemon();
 		Pokemon oP = this.opponent.getCurrentPokemon();
+		boolean allDead = false;
 		
 		oP.setHealthPoints( (int)(oP.getHealthPoints() - dc.getTotalDamage(attack.getName(), myP)) );
 		if(oP.getHealthPoints() < 0) {
+			allDead = true;
 			oP.setHealthPoints(0);
 			oP.setDead(true);
-			boolean allDead = true;
 			for(Pokemon p : this.opponent.getPokemons()) {
 				if(!p.isDead()) {
 					allDead = false;
 				}
 			}
-			if(allDead) {
-				endGame();
-			}
 		}
 		BattleData attackData = new BattleData(this.getID(), attack.getName(), myP.getName(), oP.getHealthPoints());
 		this.updateClients(attackData);
+		if(allDead) {
+			endGame();
+		}
 	}
 	
 	public void processSwitch(Switch switchObj) {
