@@ -198,14 +198,16 @@ public class Battle extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(user.getItems().get("morphine") > 0){
 					// SEND MESSAGE TO SERVER
-					user.getCurrentPokemon().setHealthPoints(user.getCurrentPokemon().getHealthPoints() + 200);
-					setStatus("You used morphine. Health increased by 200 points.");
-					BattleData bdToSend = new BattleData(user.getOpponentID(), "morphine", user.getCurrentPokemon().getName(), user.getCurrentPokemon().getHealthPoints());
-					user.sendMessageToServer(bdToSend);
-					user.getItems().put("morphine", user.getItemQuantity("morphine") - 1);
-					System.out.println("Used 1 morphine. " + user.getItemQuantity("morphine") + " left.");
-					updateBattleUI();
-					cl2.show(rightPanel, "Selection");
+					user.sendMessageToServer(new Item("morphine"));
+//					user.getCurrentPokemon().setHealthPoints(user.getCurrentPokemon().getHealthPoints() + 200);
+//					setStatus("You used morphine. Health increased by 200 points.");
+////					BattleData bdToSend = new BattleData(user.getOpponentID(), "morphine", user.getCurrentPokemon().getName(), user.getCurrentPokemon().getHealthPoints());
+////					user.sendMessageToServer(bdToSend);
+//					user.getItems().put("morphine", user.getItemQuantity("morphine") - 1);
+//					System.out.println("Used 1 morphine. " + user.getItemQuantity("morphine") + " left.");
+//					updateBattleUI();
+//					cl2.show(rightPanel, "Selection");
+					toggle();
 				}
 				else{
 					JOptionPane.showMessageDialog(pk,
@@ -223,9 +225,12 @@ public class Battle extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(user.getItems().get("steroids") > 0){
 					// SEND MESSAGE TO SERVER
-					user.getItems().put("steroids", user.getItemQuantity("steroids") - 1);
-					System.out.println("Used 1 steroid. " + user.getItemQuantity("steroids") + " left.");
-					cl2.show(rightPanel, "Selection");
+					System.out.println("CALLED!");
+					user.sendMessageToServer(new Item("steroids"));
+//					user.getItems().put("steroids", user.getItemQuantity("steroids") - 1);
+//					System.out.println("Used 1 steroid. " + user.getItemQuantity("steroids") + " left.");
+//					cl2.show(rightPanel, "Selection");
+					toggle();
 				}
 				else{
 					JOptionPane.showMessageDialog(pk,
@@ -243,6 +248,7 @@ public class Battle extends JPanel {
 					user.getItems().put("epinephrine", user.getItemQuantity("epinephrine") - 1);
 					System.out.println("Used 1 epinephrine. " + user.getItemQuantity("epinephrine") + " left.");
 					cl2.show(rightPanel, "Selection");
+					toggle();
 				}
 				else{
 					JOptionPane.showMessageDialog(pk,

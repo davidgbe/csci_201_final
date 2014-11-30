@@ -30,13 +30,13 @@ public class BattleData extends Message{
 		this.opponentStrength = oStrength;
 	}
 
-	public BattleData(int idToSendTo, String itemName, String myName, int newHealth) {
-		this.id = idToSendTo;
+	public BattleData(int id, String itemName, String myName, int newHealth, double newStrength) {
+		this.id = id;
 		this.type = "item";
 		this.itemName = itemName;
-		this.opponentPokemon = myName;
-		this.opponentHealth = newHealth;
-
+		this.myPokemon = myName;
+		this.myHealth = newHealth;
+		this.myStrength = newStrength;
 	}
 	
 	public BattleData(int id, String myName, String oName, int myHealth, int oHealth, double myStrength, double oStrength){
