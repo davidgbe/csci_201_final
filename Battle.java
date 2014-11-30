@@ -196,7 +196,7 @@ public class Battle extends JPanel {
 		
 		epinephrineUsePanel.add(backToSelectionButton2);
 		
-		updateChoosePokemonPanel();
+		updateChoosePokemonPanel(false);
 		
 		this.choosePokemon = new JButton("Choose Pokemon"); 
 		selectionPanel.add(choosePokemon); 
@@ -215,7 +215,7 @@ public class Battle extends JPanel {
 		choosePokemon.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				updateChoosePokemonPanel();
+				updateChoosePokemonPanel(false);
 				cl2.show(rightPanel, "ChangePokemon");
 				
 	
@@ -406,7 +406,7 @@ public class Battle extends JPanel {
 		useEpinephrineButton.setText("Epinephrine x" + user.getItemQuantity("epinephrine"));
 	}
 	
-	public void updateChoosePokemonPanel(){
+	public void updateChoosePokemonPanel(boolean backDisabled){
 		
 		changePokemonPanel.removeAll();
 		changePokemonPanel.repaint();
@@ -426,23 +426,31 @@ public class Battle extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					String pokemonToSwitchTo = tempButton.getText();
-					//TODO: send switch to server
 					user.sendMessageToServer(new Switch(pokemonToSwitchTo));
 					cl2.show(rightPanel, "Selection");
 					cl.show(leftPanel, "Status");
+					backToSelectionButton3.setEnabled(true);
 				}
 			});
 			
 			changePokemonPanel.add(tempButton);
 		}
-		
+		if(backDisabled) {
+			backToSelectionButton3.setEnabled(false);
+		}
 		changePokemonPanel.add(backToSelectionButton3);
 		changePokemonPanel.repaint();
 		changePokemonPanel.revalidate();
+		
 	}
 	
 	public void setStatus(String text){
 		battleStatus.setText(text);
+	}
+	
+	public void forceSwitchPokemon() {
+		updateChoosePokemonPanel(true);
+		cl2.show(rightPanel, "ChangePokemon");
 	}
 
 }

@@ -115,7 +115,7 @@ public class ClientUser extends User implements Runnable{
 			pk.currentBattle.updateBattleUI();
 			pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName());
 			if(myP.getHealthPoints() == 0) {
-				//force switch pokemon
+				pk.currentBattle.forceSwitchPokemon();
 			}
 		} else if(bd.getType().equals("item")) {
 			if(bd.getItemName().equals("morphine")){
