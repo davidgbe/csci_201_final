@@ -274,7 +274,11 @@ public class ServerUser extends User implements Runnable {
 			BattleData morphineData = new BattleData(this.getID(), "morphine", myP.getName(), myP.getHealthPoints(), myP.getStrength());
 			updateClients(morphineData);
 		} else  if(item.getType().equals("epinephrine")) {
-			
+			Pokemon targetP = this.getPokemon(item.getPokemon());
+			targetP.setHealthPoints(targetP.getTotalHealthPoints());
+			this.updateItem("epinephrine", -1);
+			BattleData eData = new BattleData(this.getID(), "epinephrine", targetP.getName(), targetP.getHealthPoints(), targetP.getStrength());
+			updateClients(eData);
 		}
 	}
 	
@@ -285,6 +289,16 @@ public class ServerUser extends User implements Runnable {
 		oP.setHealthPoints( (int)(oP.getHealthPoints() - dc.getTotalDamage(attack.getName(), myP)) );
 		if(oP.getHealthPoints() < 0) {
 			oP.setHealthPoints(0);
+			oP.setDead(true);
+			boolean allDead = true;
+			for(Pokemon p : this.opponent.getPokemons()) {
+				if(!p.isDead()) {
+					allDead = false;
+				}
+			}
+			if(allDead) {
+				endGame();
+			}
 		}
 		BattleData attackData = new BattleData(this.getID(), attack.getName(), oP.getName(), oP.getHealthPoints());
 		this.updateClients(attackData);
@@ -302,6 +316,14 @@ public class ServerUser extends User implements Runnable {
 	public void updateClients(BattleData bd) {
 		this.sendMessageToClient(bd);
 		this.opponent.sendMessageToClient(bd);
+	}
+	
+//to notify winners 
+	
+	public void endGame() {
+		GameOver go = new GameOver(this.getOpponentID());
+		this.sendMessageToClient(go);
+		this.opponent.sendMessageToClient(go);
 	}
 
 	private void processPurchase(PurchaseUpdate pu) {

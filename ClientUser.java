@@ -114,6 +114,9 @@ public class ClientUser extends User implements Runnable{
 			myP.setStrength(bd.getOpponentStrength());
 			pk.currentBattle.updateBattleUI();
 			pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName());
+			if(myP.getHealthPoints() == 0) {
+				//force switch pokemon
+			}
 		} else if(bd.getType().equals("item")) {
 			if(bd.getItemName().equals("morphine")){
 				this.opponentHealth = bd.getMyHealth();
@@ -125,7 +128,9 @@ public class ClientUser extends User implements Runnable{
 				pk.currentBattle.setStatus(bd.getMyPokemon() + " used steroids! Attack increased by 50");
 			}
 			else if(bd.getItemName().equals("epinephrine")) {
-				// do stuff
+				if(bd.getMyPokemon().equals(this.opponentPokemon)) {
+					this.opponentHealth = bd.getMyHealth();
+				}
 			}
 		}
 		this.pk.currentBattle.toggle();
@@ -150,9 +155,10 @@ public class ClientUser extends User implements Runnable{
 				pk.currentBattle.setStatus(bd.getMyPokemon() + " used steroids! Attack increased by 50");
 			}
 			else if(bd.getItemName().equals("epinephrine")) {
-				// do stuff
+				Pokemon targetP = this.getPokemon(bd.getMyPokemon());
+				targetP.setHealthPoints(bd.getMyHealth());
+				pk.currentBattle.setStatus(bd.getMyPokemon() + " used epinephrine! It was revived!");
 			}
-			
 		}
 	}
 
@@ -227,6 +233,12 @@ public class ClientUser extends User implements Runnable{
 						SendOpponentId msg = (SendOpponentId)objectReceived;
 						this.setOpponentID(msg.getIDOfOpponent());
 						System.out.println("Opponent id:" + this.getOpponentID());
+					} else if(objectReceived instanceof GameOver) {
+						if( ((GameOver)objectReceived).getWinnerID() == this.getID()) {
+							//I LOST!
+						} else {
+							//I WON!
+						}
 					}
 					
 						

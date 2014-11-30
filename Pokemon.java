@@ -7,6 +7,7 @@ public class Pokemon{
 	protected String[] allAttacks = new String[4];
 	private ImageIcon pokemonImage;
 	private double strength;
+	private boolean dead = false;
 	
 	public Pokemon(String name, int healthPoints, ImageIcon image, double strength) {
 		this.name = name;
@@ -17,6 +18,14 @@ public class Pokemon{
 	}
 	public String[] getAttacks(){
 		return allAttacks;
+	}
+	
+	public void setDead(boolean dead) {
+		this.dead = dead;
+	}
+	
+	public boolean isDead() {
+		return this.dead;
 	}
 
 	public String getName() {
