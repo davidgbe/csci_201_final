@@ -50,6 +50,8 @@ public class PokemonFrame extends JFrame {
 	
 	public static String [] pokemonNames = {"venusaur", "blastoise", "charizard", "dragonite", "gyarados", "hitmonchan",
 		"lapras", "mewtwo", "onix", "pidgeot", "pikachu", "rapidash", "rhydon", "scyther", "snorlax"};
+	
+	JButton [] arrButtons;
     
 	Map<String, ImageIcon> pokemonImages = new HashMap<String, ImageIcon>();
 
@@ -165,7 +167,7 @@ public class PokemonFrame extends JFrame {
 		inner.setPreferredSize(new Dimension(780, 650));
 		inner.setMaximumSize(new Dimension(780, 650));
 		
-		JButton [] arrButtons = new JButton [15];
+		arrButtons = new JButton [15];
 		
 		for (int i=0; i<15; i++) {
 //			System.out.println(pokemonImages.get(pokemonNames[i]));
@@ -504,6 +506,10 @@ public class PokemonFrame extends JFrame {
 		myClientUser.getPokemons().clear();
 		myClientUser.setCurrentPokemon(null);
 		currentBattle = null;
+		for(int i = 0; i < 15; ++i){
+			arrButtons[i].setBackground(null);
+			arrButtons[i].setOpaque(false);
+		}
 		
 	}
         
