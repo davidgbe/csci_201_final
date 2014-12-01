@@ -373,8 +373,8 @@ public class PokemonFrame extends JFrame {
 		bag.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				cl.show(outerPanel, "Bag");
 				bagPanel.update();
+				cl.show(outerPanel, "Bag");
 			}
 		});
         choose.addActionListener(new ActionListener(){

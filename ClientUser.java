@@ -72,6 +72,7 @@ public class ClientUser extends User implements Runnable{
 		this.setID(user.getID());
 		this.setUsername(user.getUsername());
 		this.setMoney(user.getMoney());
+		System.out.println("money now:" + user.getMoney());
 		this.setWins(user.getWins());
 		this.setLosses(user.getLosses());
 		this.setOpponentID(user.getOpponentID());

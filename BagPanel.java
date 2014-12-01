@@ -81,7 +81,7 @@ public class BagPanel extends JPanel {
 		epiLabel.setText(epiTxt);	
 		
 		
-		System.out.println("getting called");
+		System.out.println("updating bag");
 		this.revalidate();
 	}
 }
