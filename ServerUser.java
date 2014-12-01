@@ -341,7 +341,8 @@ public class ServerUser extends User implements Runnable {
 		this.opponent.sendMessageToClient(go);
 		
 		this.setInBattle(false);
-		this.setLosses(this.getLosses() + 1);
+		this.setWins(this.getWins() + 1);
+		this.setMoney(this.getMoney() + 200);
 		this.update();
 		UserUpdate uu = new UserUpdate(this.getID(), this.getUsername(), this.getMoney(), this.getWins(), this.getLosses(), this.getOpponentID(), this.getItemQuantity("steroids"), this.getItemQuantity("morphine"), this.getItemQuantity("epinephrine"));
 		this.sendMessageToClient(uu);
@@ -353,9 +354,8 @@ public class ServerUser extends User implements Runnable {
 	
 	public void won() {
 		this.setInBattle(false);
+		this.setLosses(this.getLosses() + 1);
 		
-		this.setWins(this.getWins() + 1);
-		this.setMoney(this.getMoney() + 200);
 		this.update();
 		UserUpdate uu = new UserUpdate(this.getID(), this.getUsername(), this.getMoney(), this.getWins(), this.getLosses(), this.getOpponentID(), this.getItemQuantity("steroids"), this.getItemQuantity("morphine"), this.getItemQuantity("epinephrine"));
 		this.sendMessageToClient(uu);
