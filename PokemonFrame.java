@@ -1,3 +1,12 @@
+//Group Members:
+//Brent Johnson - Crowley
+//Isaac Chien - Miller
+//Aneesha Gupta - Miller
+//Lauren Howe - Miller
+//David Bell - Miller
+//James Perng - Miller
+
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -15,6 +24,7 @@ import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+
 
 
 public class PokemonFrame extends JFrame {
@@ -57,7 +67,7 @@ public class PokemonFrame extends JFrame {
 
 	static int chosenPokemonCounter = 0;
 
-	public PokemonFrame() {
+	public PokemonFrame(String ipOfServer) {
 		super("Pokemon");
 		setSize(800,740);
 		setLocation(300, 100);
@@ -67,7 +77,7 @@ public class PokemonFrame extends JFrame {
 		this.pk = this;
 		
 		// CODE
-		myClientUser = new ClientUser();
+		myClientUser = new ClientUser(ipOfServer);
 		Thread clientThread = new Thread(myClientUser);
 		clientThread.start();
 		myClientUser.setPokemonFrame(this);
@@ -516,6 +526,10 @@ public class PokemonFrame extends JFrame {
         
      
 	public static void main (String args []){
-		new PokemonFrame();
+		if (args.length!= 1) {
+			System.out.println("USAGE: java PokemonFrame [ip of server]");
+			return;
+		}
+		new PokemonFrame(args[0]);
 	}
 }

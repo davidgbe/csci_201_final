@@ -21,12 +21,12 @@ public class ClientUser extends User implements Runnable{
 	
 	boolean myTurn = false;
 	
-	public ClientUser(){
+	public ClientUser(String ipOfServer){
 		super();
 		
 		try {
 			//TODO: DO NOT HARDCODE LOCALHOST
-			mySocket = new Socket("127.0.0.1", 1234);
+			mySocket = new Socket(ipOfServer, 1234);
 			in = new ObjectInputStream(mySocket.getInputStream());
 			out = new ObjectOutputStream(mySocket.getOutputStream());
 		} catch (IOException e) {
