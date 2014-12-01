@@ -13,7 +13,7 @@ public class Server {
 	private ReentrantLock lock = new ReentrantLock();
 	
 	
-	public Server(int port) {
+	public Server() {
 		try {
 			ServerSocket ss= new ServerSocket(1234);
 			while(true){
@@ -69,10 +69,6 @@ public class Server {
 	}
 	
 	public static void main(String [] args) {
-		if (args.length!= 1) {
-			System.out.println("USAGE: java Server [port]");
-			return;
-		}
-		Server server = new Server(Integer.parseInt(args[0]));
+		Server server = new Server();
 	}
 }

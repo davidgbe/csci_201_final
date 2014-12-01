@@ -59,10 +59,10 @@ public class PokemonFrame extends JFrame {
 
 	public PokemonFrame() {
 		super("Pokemon");
-		setSize(800,720);
+		setSize(800,740);
 		setLocation(300, 100);
 		setMinimumSize(new Dimension(800,720));
-		setMaximumSize(new Dimension(800, 720));
+		setMaximumSize(new Dimension(800, 740));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pk = this;
 		
@@ -324,7 +324,6 @@ public class PokemonFrame extends JFrame {
 		JButton store = new JButton("Go to item store"); 
 		JButton bag = new JButton("View Bag"); 
 		JButton join = new JButton("Join Game");
-		JButton view = new JButton("View Game"); 
 		JButton chat = new JButton("Chat"); 
 		
 		chat.addActionListener(new ActionListener(){
@@ -350,9 +349,6 @@ public class PokemonFrame extends JFrame {
 		join.setSize(this.getWidth(), this.getHeight()/10);
 		join.setMaximumSize(join.getSize());
 		join.setAlignmentX(Component.CENTER_ALIGNMENT); 
-		view.setSize(this.getWidth(), this.getHeight()/10);
-		view.setMaximumSize(view.getSize());
-		view.setAlignmentX(Component.CENTER_ALIGNMENT); 
 		chat.setSize(this.getWidth(), this.getHeight()/10);
 		chat.setMaximumSize(chat.getSize());
 		chat.setAlignmentX(Component.CENTER_ALIGNMENT); 
@@ -362,7 +358,6 @@ public class PokemonFrame extends JFrame {
 		menuPanel.add(store); 
 		menuPanel.add(bag); 
 		menuPanel.add(join); 
-		menuPanel.add(view); 
 		menuPanel.add(chat); 
 		
 		bag.addActionListener(new ActionListener(){
