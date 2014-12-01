@@ -336,7 +336,7 @@ public class ServerUser extends User implements Runnable {
 //to notify winners 
 	
 	public void endGame() {
-		GameOver go = new GameOver(this.getOpponentID());
+		GameOver go = new GameOver(this.getID());
 		this.sendMessageToClient(go);
 		this.opponent.sendMessageToClient(go);
 		
@@ -348,11 +348,11 @@ public class ServerUser extends User implements Runnable {
 		this.sendMessageToClient(uu);
 		
 		
-		this.opponent.won();
+		this.opponent.lose();
 		this.opponent = null;
 	}
 	
-	public void won() {
+	public void lose() {
 		this.setInBattle(false);
 		this.setLosses(this.getLosses() + 1);
 		
