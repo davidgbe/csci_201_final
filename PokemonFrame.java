@@ -217,8 +217,8 @@ public class PokemonFrame extends JFrame {
 	}
 	private void createChatPanel() {
 		JButton back = new JButton("Back to Main Menu"); 
-		JTextArea txt = new JTextArea();
-		JTextArea write = new JTextArea();
+		txt = new JTextArea();
+		write = new JTextArea();
 		JButton sendMessageButton = new JButton("Send");
         JScrollPane sp = new JScrollPane(txt);
         JScrollPane spwrite = new JScrollPane(write);
@@ -240,19 +240,19 @@ public class PokemonFrame extends JFrame {
 			}
 		});
 		class SendMessage implements ActionListener {
-			JTextArea txt;
-			JTextArea write;
-			public SendMessage(JTextArea txt, JTextArea write){
-				this.txt = txt;
-				this.write = write;
+			public SendMessage(){
+				
 			}
 		    public void actionPerformed(ActionEvent e) {
-		        String text = write.getText();
-		        txt.append(text + "\n");
+		    	String text = write.getText();
+		        System.out.println("my username:" + myClientUser.getUsername());
+		        ChatMessage messageToSend = new ChatMessage(write.getText(), myClientUser.getUsername());
+		        sendMessageToServer(messageToSend);
+		        txt.append(myClientUser.getUsername() + ": " + text + "\n");
 		        write.setText("");
 		    }
 		}
-		sendMessageButton.addActionListener(new SendMessage(txt, write));
+		sendMessageButton.addActionListener(new SendMessage());
 	}
 	
 	public void addTextToChat(ChatMessage chatmsg){
