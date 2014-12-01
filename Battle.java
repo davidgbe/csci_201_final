@@ -376,7 +376,7 @@ public class Battle extends JPanel {
 		double mHealth = user.getCurrentPokemon().getHealthPoints();
 		double mTotalHealth = user.getCurrentPokemon().getTotalHealthPoints();
 		percentage = mHealth/mTotalHealth;
-		DecimalFormat df2 = new DecimalFormat("###.##");
+		DecimalFormat df2 = new DecimalFormat("#.00");
         percentage = Double.valueOf(df2.format(percentage));
         System.out.println("My health percentage: " + percentage);
 		healthpoints1 = Double.toString(percentage*100.0); 
