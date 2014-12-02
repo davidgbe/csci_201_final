@@ -16,6 +16,7 @@ public class Server {
 	public Server() {
 		try {
 			ServerSocket ss= new ServerSocket(1234);
+			System.out.println("Server started.");
 			while(true){
 				Socket userSocket = ss.accept();
 				ServerUser ut = new ServerUser(userSocket, allUsers, this);

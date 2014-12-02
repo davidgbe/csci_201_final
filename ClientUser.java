@@ -30,7 +30,7 @@ public class ClientUser extends User implements Runnable{
 			in = new ObjectInputStream(mySocket.getInputStream());
 			out = new ObjectOutputStream(mySocket.getOutputStream());
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Could not connect to server");
 		}
 		
 	}
@@ -112,6 +112,7 @@ public class ClientUser extends User implements Runnable{
 	private void processOpponentMove(BattleData bd) {
 		Pokemon myP = this.getCurrentPokemon();
 		if(bd.getType().equals("attack")) {
+			
 			boolean attackMissed = false;
 			if(myP.getHealthPoints() == bd.getOpponentHealth()){
 				attackMissed = true;
@@ -159,14 +160,21 @@ public class ClientUser extends User implements Runnable{
 		Pokemon myP = this.getCurrentPokemon();
 		if(bd.getType().equals("attack")) {
 			boolean attackMissed = false;
+			boolean killedOpponent = false;
 			if(this.opponentHealth == bd.getOpponentHealth()){
 				attackMissed = true;
+			}
+			if(bd.getOpponentHealth() <= 0){
+				killedOpponent = true;
 			}
 			this.opponentHealth = bd.getOpponentHealth();
 			this.opponentStrength = bd.getOpponentStrength();
 			pk.currentBattle.updateBattleUI();
 			if(attackMissed){
 				pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName() + " but it missed!");
+			}
+			else if(killedOpponent){
+				pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName() + ". " + this.opponentPokemon + " fainted!");
 			}
 			else{
 				pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName());
@@ -206,13 +214,14 @@ public class ClientUser extends User implements Runnable{
 	
 	public void run() {
 		
-		System.out.println("Client started listening for messages from server");
-		
 		while(true){
 			try{
 				// send a message every second
 				while(true){
-					
+					if(mySocket == null){
+						pk.showCouldNotConnect();
+						return;
+					}
 					Object objectReceived = in.readObject();
 					if(objectReceived instanceof LoginAuthenticated){
 						System.out.println("Verifying...");

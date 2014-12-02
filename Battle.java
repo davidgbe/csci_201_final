@@ -175,7 +175,7 @@ public class Battle extends JPanel {
 		for(int i = 0; i < user.getPokemons().size(); ++i){
 			ImageIcon imageForButton = new ImageIcon("images/" + user.getPokemons().get(i).getName() + ".png");
 			Image image = imageForButton.getImage(); 
-			Image newimg = image.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH); 
+			Image newimg = image.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); 
 			ImageIcon actualImageForButton = new ImageIcon(newimg);
 			JButton tempButton = new JButton(user.getPokemons().get(i).getName(), actualImageForButton);
 			// add action listener here
@@ -416,7 +416,7 @@ public class Battle extends JPanel {
 			}
 			ImageIcon imageForButton = new ImageIcon("images/" + user.getPokemons().get(i).getName() + ".png");
 			Image image = imageForButton.getImage(); 
-			Image newimg = image.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH); 
+			Image newimg = image.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); 
 			ImageIcon actualImageForButton = new ImageIcon(newimg);
 			JButton tempButton = new JButton(user.getPokemons().get(i).getName(), actualImageForButton);
 			// add action listener here

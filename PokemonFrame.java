@@ -45,7 +45,7 @@ public class PokemonFrame extends JFrame {
 	static JPanel myBagPanel = new JPanel();
 	
 	JTextArea txt;
-	JTextArea write;
+	JTextField write;
 	
 	public static CardLayout cl = (CardLayout)(outerPanel.getLayout());
 	
@@ -81,8 +81,9 @@ public class PokemonFrame extends JFrame {
 		// CODE
 		myClientUser = new ClientUser(ipOfServer);
 		Thread clientThread = new Thread(myClientUser);
-		clientThread.start();
 		myClientUser.setPokemonFrame(this);
+		clientThread.start();
+		
 		
 		//populating pokemon image library
 		for (int i = 0; i < 15; i++){
@@ -92,7 +93,9 @@ public class PokemonFrame extends JFrame {
 		}
 	
 		
-	
+		chatFrame = new JFrame();
+		chatFrame.add(chatPanel);
+		chatFrame.setSize(800, 740);
 		
 		// CREATE CARD FUNCTIONS
 		createChatPanel();
@@ -121,9 +124,7 @@ public class PokemonFrame extends JFrame {
 		choosePokemonPanel();
 		outerPanel.add(choosePokemonPanel, "ChooseFromMain");
 		
-		chatFrame = new JFrame();
-		chatFrame.add(chatPanel);
-		chatFrame.setSize(800, 740);
+
 		
 		
 		add(outerPanel);
@@ -233,15 +234,16 @@ public class PokemonFrame extends JFrame {
 	private void createChatPanel() {
 		JButton back = new JButton("Close"); 
 		txt = new JTextArea();
-		write = new JTextArea();
+		write = new JTextField(1);
 		JButton sendMessageButton = new JButton("Send");
         JScrollPane sp = new JScrollPane(txt);
         JScrollPane spwrite = new JScrollPane(write);
         txt.setLineWrap(true);
-        write.setLineWrap(true);
+        txt.setAutoscrolls(true);
+        txt.setEditable(false);
 
         sp.setPreferredSize(new Dimension(780,580));
-        spwrite.setPreferredSize(new Dimension(700,55));
+        spwrite.setPreferredSize(new Dimension(700,28));
 
 		chatPanel.add(sp, BorderLayout.CENTER);
 		JPanel jp = new JPanel();
@@ -268,6 +270,7 @@ public class PokemonFrame extends JFrame {
 		    }
 		}
 		sendMessageButton.addActionListener(new SendMessage());
+		SwingUtilities.getRootPane(sendMessageButton).setDefaultButton(sendMessageButton);
 	}
 	
 	public void addTextToChat(ChatMessage chatmsg){
@@ -521,11 +524,20 @@ public class PokemonFrame extends JFrame {
 		myClientUser.setCurrentPokemon(null);
 		myClientUser.setInBattle(false);
 		myClientUser.myTurn = false;
+		chosenPokemonCounter = 0;
 		for(int i = 0; i < 15; ++i){
 			arrButtons[i].setBackground(null);
 			arrButtons[i].setOpaque(false);
 		}
 		
+	}
+	
+	public void showCouldNotConnect(){
+		JOptionPane.showMessageDialog(pk,
+			    "Could not connect to the server. Try again later",
+			    "Error",
+			    JOptionPane.ERROR_MESSAGE);
+		System.exit(0);
 	}
         
         

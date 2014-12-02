@@ -110,8 +110,6 @@ public class User {
 	
 	public int getItemQuantity(String itemName) {
 		if(!this.items.containsKey(itemName)) {
-			System.out.println("MISSING: " + itemName);
-			//throw
 			return 0;
 		} 
 		return this.items.get(itemName).intValue();

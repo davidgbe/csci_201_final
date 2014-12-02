@@ -71,6 +71,7 @@ public class ServerUser extends User implements Runnable {
 				this.setID(results.getInt("id"));
 				this.setUsername(username);
 				this.fetch();
+				System.out.println(this.getUsername() + " connected.");
 				return true;
 			} 
 			return false;
