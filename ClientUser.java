@@ -97,6 +97,7 @@ public class ClientUser extends User implements Runnable{
 			this.pk.showBattle();
 			if(this.myTurn) {
 				this.pk.currentBattle.toggle();
+				pk.currentBattle.setStatus("What will you do?");
 			}
 		} else {
 			if(bd.getId() == this.getID()) {
