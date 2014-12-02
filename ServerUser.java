@@ -189,6 +189,7 @@ public class ServerUser extends User implements Runnable {
 	
 	public void startBattle(ServerUser opponent, boolean start) {
 		try {
+			System.out.println("Starting a battle");
 			Pokemon myPokemon =  this.getCurrentPokemon();
 			Pokemon oPokemon = opponent.getCurrentPokemon();
 			this.opponent = opponent;
@@ -224,6 +225,7 @@ public class ServerUser extends User implements Runnable {
 				e.printStackTrace();
 			}
 		} else if(msg instanceof PurchaseUpdate) {
+			System.out.println("User with ID " + this.getID() + " purchased an item");
 			processPurchase((PurchaseUpdate)msg);
 		} else if(msg instanceof ChatMessage){
 			System.out.println("Received chat message from " + this.getUsername());
@@ -241,8 +243,10 @@ public class ServerUser extends User implements Runnable {
 				}
 			}
 		} else if(msg instanceof QueueMe) {
+			System.out.println("User with ID " + this.getID() + " added to battle queue");
 			this.server.addToQueue(this);
 		} else if(msg instanceof PokemonUpdate) {
+			System.out.println("Received pokemon from user with ID " + this.getID());
 			this.getPokemons().clear();
 			String[] names = ((PokemonUpdate)msg).getPokemon();
 			for(String name : names) {
@@ -254,10 +258,13 @@ public class ServerUser extends User implements Runnable {
 				this.setCurrentPokemon(this.getPokemon(names[0]));
 			}
 		} else if(msg instanceof Item) {
+			System.out.println("User with ID " + this.getID() + " used an item in battle");
 			processItem((Item)msg);
 		} else if(msg instanceof Attack) {
+			System.out.println("User with ID " + this.getID() + " attacked in battle");
 			processAttack((Attack)msg);
 		} else if(msg instanceof Switch) {
+			System.out.println("User with ID " + this.getID() + " switched pokemon in battle");
 			processSwitch((Switch)msg);
 		}
 	}
