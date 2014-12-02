@@ -50,7 +50,6 @@ public class ServerUser extends User implements Runnable {
 	
 	public boolean login(String username, String pass, Connection con) {
 		for(User user : allUsers) {
-			System.out.println("Here:" + user.getUsername());
 			if(user.getUsername().equals(username)) {
 				return false;
 			}
@@ -138,7 +137,7 @@ public class ServerUser extends User implements Runnable {
 			stmt.setInt(6, this.getItems().get("epinephrine").intValue());
 			stmt.setInt(7, this.getID());
 			stmt.execute();
-			System.out.println("Happens");
+			System.out.println("Updated SQL database for user with ID:" + this.getID());
 		} catch(Exception e) {
 			e.printStackTrace();
 			//lock.unlock();
@@ -177,9 +176,6 @@ public class ServerUser extends User implements Runnable {
 			this.getItems().put("steroids", results.getInt("steroids"));
 			this.getItems().put("morphine", results.getInt("morphine"));
 			this.getItems().put("epinephrine", results.getInt("epinephrine"));
-			System.out.println("steroids: " + results.getInt("steroids"));
-			System.out.println("morphine " + results.getInt("morphine"));
-			System.out.println("epinephrine: " + results.getInt("epinephrine"));
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -230,14 +226,15 @@ public class ServerUser extends User implements Runnable {
 		} else if(msg instanceof PurchaseUpdate) {
 			processPurchase((PurchaseUpdate)msg);
 		} else if(msg instanceof ChatMessage){
-			System.out.println("Received chat message");
+			System.out.println("Received chat message from " + this.getUsername());
 			ChatMessage messageReceived = (ChatMessage)msg;
 			// forward message to all other users
+			System.out.println("Forwarding message onto all other users");
 			for(int i = 0; i < allUsers.size(); ++i){
 				if(!(allUsers.get(i) == this)){
 					try {
 						allUsers.get(i).out.writeObject(messageReceived);
-						System.out.println("Forwarded message to a user");
+						
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -286,7 +283,7 @@ public class ServerUser extends User implements Runnable {
 			Pokemon targetP = this.getPokemon(item.getPokemon());
 			targetP.setHealthPoints(targetP.getTotalHealthPoints());
 			if(targetP.isDead()) {
-				targetP.setDead(true);
+				targetP.setDead(false);
 			}
 			this.updateItem("epinephrine", -1);
 			BattleData eData = new BattleData(this.getID(), "epinephrine", targetP.getName(), targetP.getHealthPoints(), targetP.getStrength());
@@ -366,9 +363,6 @@ public class ServerUser extends User implements Runnable {
 
 	private void processPurchase(PurchaseUpdate pu) {
 		int total = 0;
-		System.out.println("S: " + pu.getSteroids());
-		System.out.println("M: " + pu.getMorphine());
-		System.out.println("E: " + pu.getEpinephrine());
 		if(pu.getSteroids() != 0) {
 			total += pu.getSteroids() * STEROIDS_PRICE;
 		}
@@ -429,9 +423,9 @@ public class ServerUser extends User implements Runnable {
 			
 		} catch(IOException eofe) {
 			if(this.isInBattle()) {
-				this.opponent.sendMessageToClient(new GameOver(this.getID()));
+				this.opponent.sendMessageToClient(new GameOver(this.opponent.getID()));
 				this.opponent.setInBattle(false);
-				System.out.println("send game over from disconnect");
+				System.out.println("Player disconnected. Send game over to his opponent");
 				//exit battle
 			}
 			allUsers.remove(this);

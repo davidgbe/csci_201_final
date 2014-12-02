@@ -57,6 +57,8 @@ public class PokemonFrame extends JFrame {
 	JPanel waitingPanel = new JPanel();
 	JPanel choosePokemonPanel = new JPanel();
 	
+	JFrame chatFrame;
+	
 	
 	public static String [] pokemonNames = {"venusaur", "blastoise", "charizard", "dragonite", "gyarados", "hitmonchan",
 		"lapras", "mewtwo", "onix", "pidgeot", "pikachu", "rapidash", "rhydon", "scyther", "snorlax"};
@@ -102,7 +104,7 @@ public class PokemonFrame extends JFrame {
 		
 		// ADD CARDS TO OUTERPANEL
 		outerPanel.add(battlePanel, "Battle");
-		outerPanel.add(chatPanel, "Chat");
+		//outerPanel.add(chatPanel, "Chat");
 		outerPanel.add(signUpPanel, "Sign Up");
 		outerPanel.add(menuPanel, "Main Menu");
 		outerPanel.add(startPanel, "Start");
@@ -118,6 +120,10 @@ public class PokemonFrame extends JFrame {
 		outerPanel.add(waitingPanel, "Waiting");
 		choosePokemonPanel();
 		outerPanel.add(choosePokemonPanel, "ChooseFromMain");
+		
+		chatFrame = new JFrame();
+		chatFrame.add(chatPanel);
+		chatFrame.setSize(800, 740);
 		
 		
 		add(outerPanel);
@@ -180,7 +186,6 @@ public class PokemonFrame extends JFrame {
 		arrButtons = new JButton [15];
 		
 		for (int i=0; i<15; i++) {
-//			System.out.println(pokemonImages.get(pokemonNames[i]));
 			ImageIcon myTest = pokemonImages.get(pokemonNames[i]);
 			Image image = myTest.getImage(); // transform it 
 			Image newimg = image.getScaledInstance(60, 60,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
@@ -226,7 +231,7 @@ public class PokemonFrame extends JFrame {
 		add(choosePokemonPanel);
 	}
 	private void createChatPanel() {
-		JButton back = new JButton("Back to Main Menu"); 
+		JButton back = new JButton("Close"); 
 		txt = new JTextArea();
 		write = new JTextArea();
 		JButton sendMessageButton = new JButton("Send");
@@ -246,7 +251,8 @@ public class PokemonFrame extends JFrame {
 		chatPanel.add(back, BorderLayout.SOUTH);
 		back.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cl.show(outerPanel, "Main Menu");
+				//cl.show(outerPanel, "Main Menu");
+				chatFrame.setVisible(false);
 			}
 		});
 		class SendMessage implements ActionListener {
@@ -255,7 +261,6 @@ public class PokemonFrame extends JFrame {
 			}
 		    public void actionPerformed(ActionEvent e) {
 		    	String text = write.getText();
-		        System.out.println("my username:" + myClientUser.getUsername());
 		        ChatMessage messageToSend = new ChatMessage(write.getText(), myClientUser.getUsername());
 		        sendMessageToServer(messageToSend);
 		        txt.append(myClientUser.getUsername() + ": " + text + "\n");
@@ -338,8 +343,8 @@ public class PokemonFrame extends JFrame {
 		
 		chat.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				cl.show(outerPanel, "Chat");
+			public void actionPerformed(ActionEvent e) {	
+				chatFrame.setVisible(true);
 			}
 		});
 		JLabel logoLabel = new JLabel(logo); 

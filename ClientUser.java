@@ -111,12 +111,22 @@ public class ClientUser extends User implements Runnable{
 	private void processOpponentMove(BattleData bd) {
 		Pokemon myP = this.getCurrentPokemon();
 		if(bd.getType().equals("attack")) {
+			boolean attackMissed = false;
+			if(myP.getHealthPoints() == bd.getOpponentHealth()){
+				attackMissed = true;
+			}
 			myP.setHealthPoints(bd.getOpponentHealth());
 			myP.setStrength(bd.getOpponentStrength());
 			pk.currentBattle.updateBattleUI();
-			pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName());
+			if(attackMissed){
+				pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName() + " but it missed!");
+			}
+			else{
+				pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName());
+			}
 			if(myP.getHealthPoints() == 0) {
 				this.getCurrentPokemon().setDead(true);
+				pk.currentBattle.setStatus(this.getCurrentPokemon().getName() + " fainted! Choose a pokemon");
 				pk.currentBattle.forceSwitchPokemon();
 			}
 		} else if(bd.getType().equals("item")) {
@@ -126,12 +136,13 @@ public class ClientUser extends User implements Runnable{
 				pk.currentBattle.updateBattleUI();
 			} else if(bd.getItemName().equals("steroids")) {
 				this.opponentStrength = bd.getMyStrength();
-				System.out.println("opp new strength: " + bd.getMyStrength());
+				System.out.println("Opponent's new strength: " + bd.getMyStrength());
 				pk.currentBattle.setStatus(bd.getMyPokemon() + " used steroids! Attack increased");
 			}
 			else if(bd.getItemName().equals("epinephrine")) {
 				if(bd.getMyPokemon().equals(this.opponentPokemon)) {
 					this.opponentHealth = bd.getMyHealth();
+					pk.currentBattle.setStatus("Opponent fully restored " + bd.getMyPokemon());
 				}
 			}
 		} else if(bd.getType().equals("switch")) {
@@ -146,10 +157,20 @@ public class ClientUser extends User implements Runnable{
 	private void processOwnMove(BattleData bd) {
 		Pokemon myP = this.getCurrentPokemon();
 		if(bd.getType().equals("attack")) {
+			boolean attackMissed = false;
+			if(this.opponentHealth == bd.getOpponentHealth()){
+				attackMissed = true;
+			}
 			this.opponentHealth = bd.getOpponentHealth();
 			this.opponentStrength = bd.getOpponentStrength();
 			pk.currentBattle.updateBattleUI();
-			pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName());
+			if(attackMissed){
+				pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName() + " but it missed!");
+			}
+			else{
+				pk.currentBattle.setStatus(bd.getOpponentPokemon() + " used " + bd.getAttackName());
+			}
+			
 		} else if(bd.getType().equals("item")) {
 			if(bd.getItemName().equals("morphine")){
 				this.updateItem(bd.getItemName(), -1);
@@ -158,14 +179,14 @@ public class ClientUser extends User implements Runnable{
 				pk.currentBattle.updateBattleUI();
 			} else if(bd.getItemName().equals("steroids")) {
 				myP.setStrength(bd.getMyStrength());
-				System.out.println("my new strength: " + bd.getMyStrength());
+				System.out.println("My new strength: " + bd.getMyStrength());
 				pk.currentBattle.setStatus(bd.getMyPokemon() + " used steroids! Attack increased");
 			}
 			else if(bd.getItemName().equals("epinephrine")) {
 				Pokemon targetP = this.getPokemon(bd.getMyPokemon());
 				targetP.setHealthPoints(bd.getMyHealth());
 				targetP.setDead(false);
-				pk.currentBattle.setStatus(bd.getMyPokemon() + " used epinephrine! It was revived!");
+				pk.currentBattle.setStatus(bd.getMyPokemon() + " used epinephrine! It was fully restored!");
 			}
 		} else if(bd.getType().equals("switch")) {
 			this.setCurrentPokemon(this.getPokemon(bd.getMyPokemon()));
@@ -244,7 +265,7 @@ public class ClientUser extends User implements Runnable{
 					}else if(objectReceived instanceof SendOpponentId) {
 						SendOpponentId msg = (SendOpponentId)objectReceived;
 						this.setOpponentID(msg.getIDOfOpponent());
-						System.out.println("Opponent id:" + this.getOpponentID());
+						System.out.println("Opponent's ID:" + this.getOpponentID());
 					} else if(objectReceived instanceof GameOver) {
 						if( ((GameOver)objectReceived).getWinnerID() == this.getID()) {
 							//I LOST!
