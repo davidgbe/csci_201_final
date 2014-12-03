@@ -79,9 +79,9 @@ public class ClientUser extends User implements Runnable{
 		if(this.getItems() == null) {
 			this.setItems(new HashMap<String, Integer>());
 		}
-		this.updateItem("steroids", user.getSteroids());
-		this.updateItem("morphine", user.getMorphine());
-		this.updateItem("epinephrine", user.getEpinephrine());
+		this.setItemQuantity("steroids", user.getSteroids());
+		this.setItemQuantity("morphine", user.getMorphine());
+		this.setItemQuantity("epinephrine", user.getEpinephrine());
 	}
 	
 	private void processBattleData(BattleData bd) {
