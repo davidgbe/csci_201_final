@@ -50,7 +50,7 @@ public class ServerUser extends User implements Runnable {
 	
 	public boolean login(String username, String pass, Connection con) {
 		for(User user : allUsers) {
-			if(user.getUsername().equals(username)) {
+			if(user.getUsername().equals(username) || user.getUsername().toLowerCase().equals(username.toLowerCase())) {
 				return false;
 			}
 		}
